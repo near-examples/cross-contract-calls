@@ -6,8 +6,8 @@ This repo is a collection of examples using cross-contract calls on the NEAR pla
 
 1. clone this repo locally
 2. `yarn` (or `npm install`)
-3. yarn test:01 (or `npm run test:01`)
-4. explore the contents of `/contracts/01.basic-calls`
+3. yarn test:00 (or `npm run test:00`)
+4. explore the contents of `/contracts/00.orientation`
 
 See below for more convenience scripts ...
 
@@ -24,7 +24,7 @@ yarn test:unit                # asp --verbose --nologo -f unit.spec
 **Run unit tests for individual examples**
 
 ```sh
-yarn test:u:01                # run units tests for example 01
+yarn test:u:00                # run units tests for example 00
 ```
 
 ### Simulation Tests
@@ -38,7 +38,7 @@ yarn test:simulate            # jest --verbose -f simulate.spec --all
 **Run simulation tests for individual examples**
 
 ```sh
-yarn test:s:01                # run simulation tests for example 01
+yarn test:s:00                # run simulation tests for example 00
 ```
 
 ### All Tests
@@ -52,5 +52,5 @@ yarn test                     # yarn test:unit && test:simulate
 Test individual example
 
 ```sh
-yarn test:01                  # run unit and simulation tests for example 01
+yarn test:00                  # run unit and simulation tests for example 00
 ```
