@@ -1,0 +1,50 @@
+diff --git a/./contracts/00.orientation/__tests__/fixtures/vm-response/raw/high-level.json b/./contracts/00.orientation/__tests__/fixtures/vm-response/raw/low-level.json
+index 3cadb8d..556727c 100644
+--- a/./contracts/00.orientation/__tests__/fixtures/vm-response/raw/high-level.json
++++ b/./contracts/00.orientation/__tests__/fixtures/vm-response/raw/low-level.json
+@@ -4,7 +4,7 @@
+   "result": {
+     "outcome": {
+       "balance": "1000000000000",
+-      "storage_usage": 60,
++      "storage_usage": 0,
+       "return_data": {
+         "Value": "\"some result\""
+       },
+@@ -20,7 +20,7 @@
+   },
+   "calls": {
+     "0": {
+-      "input": "{\"level\":\"high\",\"account\":\"remote\",\"method\":\"do_some_work\"}",
++      "input": "{\"level\":\"low\",\"account\":\"remote\",\"method\":\"do_some_work\"}",
+       "prepaid_gas": 1000000000000000,
+       "signer_account_pk": "alice",
+       "signer_account_id": "alice",
+@@ -45,14 +45,14 @@
+     "0": {
+       "outcome": {
+         "balance": "1000000000000",
+-        "storage_usage": 60,
++        "storage_usage": 0,
+         "return_data": {
+           "ReceiptIndex": 0
+         },
+-        "burnt_gas": 2648479947802,
+-        "used_gas": 10076436722746,
++        "burnt_gas": 2646375387157,
++        "used_gas": 10074332162101,
+         "logs": [
+-          "[HIGH LEVEL] preparing to call [ remote.do_some_work() ]"
++          "[LOW LEVEL] preparing to call [ remote.do_some_work() ]"
+         ]
+       },
+       "err": null,
+@@ -77,7 +77,7 @@
+     "1": {
+       "outcome": {
+         "balance": "1000000000000",
+-        "storage_usage": 60,
++        "storage_usage": 0,
+         "return_data": {
+           "Value": "\"some result\""
+         },

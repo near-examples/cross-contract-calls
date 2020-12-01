@@ -1,0 +1,27 @@
+diff --git a/./contracts/00.orientation/__tests__/fixtures/vm-response/raw/mid-level.json b/./contracts/00.orientation/__tests__/fixtures/vm-response/raw/low-level.json
+index c044726..556727c 100644
+--- a/./contracts/00.orientation/__tests__/fixtures/vm-response/raw/mid-level.json
++++ b/./contracts/00.orientation/__tests__/fixtures/vm-response/raw/low-level.json
+@@ -20,7 +20,7 @@
+   },
+   "calls": {
+     "0": {
+-      "input": "{\"level\":\"mid\",\"account\":\"remote\",\"method\":\"do_some_work\"}",
++      "input": "{\"level\":\"low\",\"account\":\"remote\",\"method\":\"do_some_work\"}",
+       "prepaid_gas": 1000000000000000,
+       "signer_account_pk": "alice",
+       "signer_account_id": "alice",
+@@ -49,10 +49,10 @@
+         "return_data": {
+           "ReceiptIndex": 0
+         },
+-        "burnt_gas": 2646383099899,
+-        "used_gas": 10074339874843,
++        "burnt_gas": 2646375387157,
++        "used_gas": 10074332162101,
+         "logs": [
+-          "[MID LEVEL] preparing to call [ remote.do_some_work() ]"
++          "[LOW LEVEL] preparing to call [ remote.do_some_work() ]"
+         ]
+       },
+       "err": null,

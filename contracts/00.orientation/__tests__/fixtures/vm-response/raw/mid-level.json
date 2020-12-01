@@ -1,0 +1,95 @@
+{
+  "return_data": "some result",
+  "err": null,
+  "result": {
+    "outcome": {
+      "balance": "1000000000000",
+      "storage_usage": 0,
+      "return_data": {
+        "Value": "\"some result\""
+      },
+      "burnt_gas": 170486302044,
+      "used_gas": 170486302044,
+      "logs": [
+        "[REMOTE] do_some_work() was called ... [e:1|b:1|t:42] [c:remote|s:alice|p:local] "
+      ]
+    },
+    "err": null,
+    "receipts": [],
+    "state": {}
+  },
+  "calls": {
+    "0": {
+      "input": "{\"level\":\"mid\",\"account\":\"remote\",\"method\":\"do_some_work\"}",
+      "prepaid_gas": 1000000000000000,
+      "signer_account_pk": "alice",
+      "signer_account_id": "alice",
+      "attached_deposit": "0",
+      "index": 0,
+      "account_id": "local",
+      "method_name": "xcc"
+    },
+    "1": {
+      "index": 1,
+      "account_id": "remote",
+      "method_name": "do_some_work",
+      "input": "\"{}\"",
+      "signer_account_id": "alice",
+      "predecessor_account_id": "local",
+      "input_data": [],
+      "prepaid_gas": 5000000000000,
+      "attached_deposit": 0
+    }
+  },
+  "results": {
+    "0": {
+      "outcome": {
+        "balance": "1000000000000",
+        "storage_usage": 0,
+        "return_data": {
+          "ReceiptIndex": 0
+        },
+        "burnt_gas": 2646383099899,
+        "used_gas": 10074339874843,
+        "logs": [
+          "[MID LEVEL] preparing to call [ remote.do_some_work() ]"
+        ]
+      },
+      "err": null,
+      "receipts": [
+        {
+          "receipt_indices": [],
+          "receiver_id": "remote",
+          "actions": [
+            {
+              "FunctionCall": {
+                "method_name": "do_some_work",
+                "args": "\"{}\"",
+                "gas": 5000000000000,
+                "deposit": 0
+              }
+            }
+          ]
+        }
+      ],
+      "state": {}
+    },
+    "1": {
+      "outcome": {
+        "balance": "1000000000000",
+        "storage_usage": 0,
+        "return_data": {
+          "Value": "\"some result\""
+        },
+        "burnt_gas": 170486302044,
+        "used_gas": 170486302044,
+        "logs": [
+          "[REMOTE] do_some_work() was called ... [e:1|b:1|t:42] [c:remote|s:alice|p:local] "
+        ]
+      },
+      "err": null,
+      "receipts": [],
+      "state": {}
+    }
+  }
+}

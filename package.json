@@ -1,0 +1,36 @@
+{
+  "name": "cross-contract-calls",
+  "version": "0.0.1",
+  "description": "A collection of modules exploring cross contract calls",
+  "scripts": {
+    "dev": "watch -d -n 1 'clear && yarn test:unit'",
+    "test:unit": "asp --verbose --nologo -f unit.spec",
+    "test:u:00": "asp --verbose --nologo -f 00.*unit.spec",
+    "test:u:01": "asp --verbose --nologo -f 01.*unit.spec",
+    "test:u:02": "asp --verbose --nologo -f 02.*unit.spec",
+    "test:u:03": "asp --verbose --nologo -f 03.*unit.spec",
+    "test:simulate": "jest --verbose -f simulate.spec --all",
+    "test:s:00": "yarn build:00 && jest --verbose -f 00.*simulate.spec --all",
+    "test:s:01": "yarn build:01 && jest --verbose -f 01.*simulate.spec --all",
+    "test:s:02": "yarn build:02 && jest --verbose -f 02.*simulate.spec --all",
+    "test:s:03": "yarn build:03 && jest --verbose -f 03.*simulate.spec --all",
+    "build:00": "asb --debug -d contracts/00.orientation/src/00-local && asb --debug -d contracts/00.orientation/src/00-remote",
+    "build:01": "asb --debug -d contracts/01.using-single-calls/src/01",
+    "build:02": "asb --debug -d contracts/02.using-multiple-calls/src/02",
+    "build:03": "asb --debug -d contracts/03.using-callbacks/src/03",
+    "build": "asb --debug",
+    "test": "yarn test:unit && yarn test:simulate",
+    "test:00": "yarn test:u:00 && yarn test:s:00",
+    "test:01": "yarn test:u:01 && yarn test:s:01",
+    "test:02": "yarn test:u:02 && yarn test:s:02",
+    "test:03": "yarn test:u:03 && yarn test:s:03",
+    "clean": "rm -rf ./build"
+  },
+  "keywords": [],
+  "author": "hello@near.org",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "near-sdk-as": "^2.1.0"
+  }
+}

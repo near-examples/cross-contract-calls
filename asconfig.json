@@ -1,0 +1,9 @@
+{
+  "workspaces": [
+    "contracts/00.orientation/src/00-local",
+    "contracts/00.orientation/src/00-remote",
+    "contracts/01.using-single-calls/src/01",
+    "contracts/02.using-multiple-calls/src/02",
+    "contracts/03.using-callbacks/src/03"
+  ]
+}
