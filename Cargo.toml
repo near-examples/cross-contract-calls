@@ -1,0 +1,10 @@
+# [package]
+# name = "cross-contract-calls"
+# version = "0.0.0"
+# authors = ["Near Inc <hello@nearprotocol.com>"]
+# edition = "2018"
+
+[workspace]
+members = [
+  "contracts/00.orientation/simulation"
+]
