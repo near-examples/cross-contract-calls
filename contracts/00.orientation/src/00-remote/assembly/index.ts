@@ -5,7 +5,6 @@ import { context, logging } from "near-sdk-as"
  */
 export function do_some_work(): string {
   const message = '[REMOTE] do_some_work() was called ... ' + Environment.capture()
-
   logging.log(message)
   return 'some result'
 }
@@ -15,17 +14,15 @@ export function do_some_work(): string {
  * for logging purposes
  */
 class Environment {
-  constructor(
-    public epoch: u64 = context.epochHeight,
-    public block: u64 = context.blockIndex,
-    public timestamp: u64 = context.blockTimestamp,
+  static epoch: u64 = context.epochHeight;
+  static block: u64 = context.blockIndex;
+  static timestamp: u64 = context.blockTimestamp;
 
-    public contract: string = context.contractName,
-    public sender: string = context.sender,
-    public predecessor: string = context.predecessor,
-  ) { }
+  static contract: string = context.contractName;
+  static sender: string = context.sender;
+  static predecessor: string = context.predecessor;
 
-  toString(prefix: string): string {
+  static toString(prefix: string): string {
     let message = prefix
     message += '[e:' + this.epoch.toString() + '|b:' + this.block.toString() + '|t:' + this.timestamp.toString() + '] '
     message += '[c:' + this.contract + '|s:' + this.sender + '|p:' + this.predecessor + '] '
@@ -33,6 +30,6 @@ class Environment {
   }
 
   static capture(prefix: string = ''): string {
-    return (new Environment()).toString(prefix)
+    return Environment.toString(prefix)
   }
 }
