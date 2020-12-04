@@ -1,8 +1,7 @@
 use near_sdk::near_bindgen;
 #[allow(dead_code)]
 #[near_bindgen]
-pub struct Linkdrop {
-}
+pub struct Linkdrop {}
 
 #[near_bindgen]
 impl Linkdrop {
