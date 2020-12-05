@@ -1,4 +1,4 @@
-import { env, base58, context, u128, PersistentMap, ContractPromise, ContractPromiseBatch } from 'near-sdk-as'
+import { env, base58, context, u128, PersistentMap, ContractPromise, ContractPromiseBatch, logging } from 'near-sdk-as'
 
 type AccountId = string
 type PublicKey = string // @willem: i haven't captured the difference between this type and the one below.  not sure if we need it
@@ -38,6 +38,7 @@ function is_promise_success(): bool { // @willem: not sure how to express this m
  * @param public_key
  */
 export function send(public_key: Base58PublicKey): void {
+  logging.log('received call to send')
   const attached_deposit = context.attachedDeposit
   assert(attached_deposit > ACCESS_KEY_ALLOWANCE, "Attached deposit must be greater than ACCESS_KEY_ALLOWANCE")
 
@@ -48,6 +49,7 @@ export function send(public_key: Base58PublicKey): void {
 
   const current_account_id = context.contractName
 
+  logging.log('about to call xcc')
   ContractPromiseBatch
     .create(current_account_id)
     .add_access_key(
