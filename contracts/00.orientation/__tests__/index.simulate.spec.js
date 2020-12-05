@@ -7,8 +7,8 @@ const {
 } = require('../../simulation-helpers')
 const path = require("path");
 
-const LOCAL_CONTRACT = path.join(__dirname, "/../../../build/release/00-local.wasm");
-const REMOTE_CONTRACT = path.join(__dirname, "/../../../build/release/00-remote.wasm");
+const LOCAL_CONTRACT = path.join(__dirname, "/../../../build/debug/00-local.wasm");
+const REMOTE_CONTRACT = path.join(__dirname, "/../../../build/debug/00-remote.wasm");
 
 describe("00.orientation", () => {
   const users = ["alice", "bob", "carol"];
