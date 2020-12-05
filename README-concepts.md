@@ -1,10 +1,10 @@
 # Cross-contract Calls
 
-The ability to call one contract method from another is an especially valuable feature on the NEAR network. This is because of the way accounts, contracts and shards are related in NEAR Protocol.
+The ability to call a contract's method from another contract is an especially valuable feature on NEAR because of the way accounts, contracts and shards are related in the NEAR Protocol.
 
-Each account on NEAR may have only zero or one contract.  User accounts usually don't host a contract but there are exceptions to this, while DApp accounts usually _do_ host a contract.   Some DApps may even require a system of interrelated contracts to coordinate the work of the DApp in which case these contracts would most likely be hosted on subaccounts, a valid account naming convention similar to DNS.  For example, a developer may choose the account `dapp.near` to be the top level account and `module1.dapp.near`, `module2.dapp.near`, etc. for each of the interralated parts of the DApp.
+Each account on NEAR may have at most one contract.  User accounts usually do not host a contract while DApp accounts usually _do_ host a contract.   Some DApps may even require a system of interrelated contracts to coordinate the work of the DApp in which case these contracts would most likely be hosted on subaccounts, a valid account naming convention similar to DNS.  For example, `dapp.near` could be the top level account and could have subaccounts `module1.dapp.near`, `module2.dapp.near`, etc. for each of the interralated parts of the DApp.
 
-Accounts are said to "live" on only one "home" shard, meaning: all their state is stored on that one shard and all calls to a contract on that account are routed through the network to nodes following this shard.  Further, the protocol reserves the right to reallocate accounts among shards which benefits the network by isolating especially popular accounts (ie. contracts) to their own shard where they don't affect the throughput of all other shards in the system.  At time of writing, NEAR MainNet is single sharded but progress is being made by the NEAR Core Team and Guilds in the community towards a multi-sharded system.
+Accounts are said to "live" on only one "home" shard, meaning: all their state is stored on one shard and all calls to a contract on that account are routed through the network to nodes following this shard.  Furthermore, the protocol reserves the right to reallocate accounts among shards which benefits the network by isolating especially popular accounts (ie. contracts) to their own shard where they do not affect the throughput of all other shards in the system.  At time of writing, NEAR MainNet is single sharded but progress is being made by the NEAR Core Team and Guilds in the community towards a multi-sharded network.
 
 Developers who come to understand and take advantage of this account model will recognize several benefits:
 
@@ -22,20 +22,20 @@ Whether taking advantage of existing contracts deployed to the network or buildi
 The most common pattern of making a cross-contract call is calling one contract method from another. This capability is supported by a dedicated interface for invoking these calls.
 
 This interface is implemented at two levels of abstraction:
-- a low level C-style interface that maps to the API of the NEAR virtual machine (which is wrapped with ...)
-- a high level ergonomic interface to support native Rust and AssemblyScript types
+- a low level C-style interface that maps to the API of the NEAR virtual machine
+- a high level ergonomic interface to support Rust and AssemblyScript types
 
 ### High Level Interface
 
-The high level interface is designed to resemble the JavaScript Promise interface and wraps the low level interface for convenience, accepting native Rust and AssemblyScript types as parameters
+The high level interface is designed to resemble the JavaScript Promise interface and wraps the low level interface for convenience, accepting Rust and AssemblyScript types as parameters
 
 - `ContractPromise.create`: (static method) addresses the most common pattern, calling one contract method from another
 - `ContractPromise.all`: (static method) allows merging the results of multiple method calls
-- `ContractPromise#then`: allows chaining multiple method calls (ie. do one after the other completes)
+- `ContractPromise#then`: allows chaining multiple method calls (i.e. do one after the other completes)
 
 **when?**
 
-This interface is recommended for all cross-contract calls must to invoke one contract inside another contract method.  This covers about specific 80% _also_ the use cases one can imagine at time of writing.
+This interface is recommended for all cross-contract calls that must invoke one contract from inside another contract method.  This covers about 80% of use cases.
 
 The return value of the method call will not be implicitly captured or made available.
 
@@ -48,10 +48,10 @@ These options for capturing return values are not mutually exclusive.  Developer
 **how?**
 
 This interface can be used in four patterns that can be recombined for more complex scenarios:
-- ignore the return value altogether
-- replace the return value of the same current method with the return new value of the remote method
-- capture the return value of the remote method using a callback
-- aggregate the return value of multiple remote methods
+1. Ignore the return value altogether
+2. Replace the return value of the same current method with the return new value of the remote method
+3. Capture the return value of the remote method using a callback
+4. Aggregate the return value of multiple remote methods
 
 1. "Fire and Forget" (_the return value of the remote method will be ignored_)
 
@@ -199,12 +199,12 @@ export function promise_then(
 Another approach to making a cross-contract calls is to compose a transaction using one or more primitive actions and then sending this transaction to the network from within a contract method. This capability is supported by a dedicated interface for invoking these calls.
 
 This interface is implemented at two levels of abstraction:
-- a low level C-style interface that maps to the API of the NEAR virtual machine (which is wrapped with ...)
-- a high level ergonomic interface to support native Rust and AssemblyScript types
+- a low level C-style interface that maps to the API of the NEAR virtual machine
+- a high level ergonomic interface to support Rust and AssemblyScript types
 
-### 8 possible actions
+### Eight Actions
 
-NEAR Protocol supports 8 primitive actions that can be composed to form a single transction.  This design provides a flexible mechanism for developers to control the behavior of the network.
+NEAR Protocol supports eight (8) primitive actions that can be composed to form a single transaction.  This design provides a flexible mechanism for developers to control the behavior of the network.
 
 Using batch cross-contract calls, developers append any one of the following 8 supported NEAR actions to a batch transaction which is then processed by the network:
 
@@ -494,8 +494,8 @@ Developers can also inspect the number of results available in a tuple of result
 
 ### High Level Interface
 
-`ContractPromise#getResults`
-`ContractPromiseResult`
+- `ContractPromise#getResults`
+- `ContractPromiseResult`
 
 ### Low Level Interface
 
