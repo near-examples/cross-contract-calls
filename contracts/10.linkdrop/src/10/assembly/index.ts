@@ -1,3 +1,4 @@
+// @nearfile out
 import { env, base58, context, u128, PersistentMap, ContractPromise, ContractPromiseBatch, logging } from 'near-sdk-as'
 
 type AccountId = string
@@ -7,8 +8,8 @@ type Balance = u128
 
 export const accounts = new PersistentMap<PublicKey, Balance>("a")
 
-export const ACCESS_KEY_ALLOWANCE: u128 = u128.from(10 ^ 24) // 1 NEAR
-const ON_CREATE_ACCOUNT_CALLBACK_GAS: u64 = 20_000_000_000_000 // 20 Tgas ("teragas")
+function ACCESS_KEY_ALLOWANCE(): u128 { return u128.from("1000000000000000000000000")} // 1 NEAR
+const ON_CREATE_ACCOUNT_CALLBACK_GAS: u64 = 200_000_000_000_000 // 20 Tgas ("teragas")
 const NO_DEPOSIT: u128 = u128.Zero
 
 
@@ -31,21 +32,28 @@ function is_promise_success(): bool { // @willem: not sure how to express this m
  * https://github.com/near/near-linkdrop/blob/63a4d0c4acbc2ffcf865be2b270c900bea765782/src/lib.rs#L52-L69
  *
  * Allows given public key to claim sent balance.
- * Takes ACCESS_KEY_ALLOWANCE as fee from deposit to cover account creation via an access key.
+ * Takes ACCESS_KEY_ALLOWANCE() as fee from deposit to cover account creation via an access key.
  *
  * #[payable] -- note, AS contract methods don't control for attached deposit
  *
- * @param public_key
+ * @param public_key_arr
  */
 export function send(public_key: Base58PublicKey): void {
-  logging.log('received call to send')
+  let public_key_arr = decodePk(public_key);
+  // logging.log("public_key: " + public_key);
+  // logging.log('received call to send');
   const attached_deposit = context.attachedDeposit
-  assert(attached_deposit > ACCESS_KEY_ALLOWANCE, "Attached deposit must be greater than ACCESS_KEY_ALLOWANCE")
+  assert(attached_deposit > ACCESS_KEY_ALLOWANCE(), "Attached deposit must be greater than ACCESS_KEY_ALLOWANCE()")
+  
+  const value = accounts.get(base58.encode(public_key_arr), u128.Zero)!
 
-  const value = accounts.get(public_key, u128.Zero)!
-
-  //                                value + env::attached_deposit() - ACCESS_KEY_ALLOWANCE
-  accounts.set(public_key, u128.add(value, u128.sub(attached_deposit, ACCESS_KEY_ALLOWANCE)))
+  //                                value + env::attached_deposit() - ACCESS_KEY_ALLOWANCE()
+  logging.log("VALUE " + value.toString());
+  logging.log(ACCESS_KEY_ALLOWANCE().toString())
+  logging.log("attached " + attached_deposit.toString());
+  let amount = u128.add(value, u128.sub(attached_deposit, ACCESS_KEY_ALLOWANCE()));
+  logging.log("INITIAL: " + amount.toString())
+  accounts.set(base58.encode(public_key_arr), amount)
 
   const current_account_id = context.contractName
 
@@ -53,8 +61,8 @@ export function send(public_key: Base58PublicKey): void {
   ContractPromiseBatch
     .create(current_account_id)
     .add_access_key(
-      base58.decode(public_key),
-      ACCESS_KEY_ALLOWANCE,
+      public_key_arr,
+      ACCESS_KEY_ALLOWANCE(),
       current_account_id,
       ["claim", "create_account_and_claim"]
     );
@@ -99,16 +107,20 @@ export function claim(account_id: AccountId): void {
 export function create_account_and_claim(new_account_id: AccountId, new_public_key: Base58PublicKey): void {
   const current_account_id = context.contractName
   const signer_account_pk = context.senderPublicKey
+  logging.log("new pk: " + new_public_key)
 
   assert(context.predecessor == current_account_id, "Claim only can come from this account")
   assert(env.isValidAccountID(new_account_id), "Invalid account id")
 
   const amount = accounts.getSome(signer_account_pk) // .expect("Unexpected public key"); @willem
+  logging.log("AMOUNT: " + amount.toString())
   accounts.delete(signer_account_pk)
-
+  const newKey = decodePk(new_public_key);
+  logging.log("new Key: " + base58.encode(newKey));
   ContractPromiseBatch
     .create(new_account_id)
-    .add_full_access_key(base58.decode(new_public_key))
+    .create_account()
+    .add_full_access_key(newKey)
     .transfer(amount)
     .then(current_account_id)
     .function_call(
@@ -217,4 +229,44 @@ class OnAccountCreatedAndClaimedArgs {
  */
 export function get_key_balance(key: Base58PublicKey): u128 {
   return accounts.getSome(key)
+}
+
+export function decodePk(key: PublicKey): Uint8Array {
+  if (key.indexOf(':') > -1) {
+    const keyParts = key.split(':')
+    let prefix = keyParts[0]
+    if (prefix == 'ed25519') {
+      // prefix key with base58 0 -- yes, it's actually a decimal 1 :P
+      return base58.decode('1' + keyParts[1])
+    } else {
+      assert(false, "Bad key")
+      return new Uint8Array(0)
+    }
+  } else {
+    let decodedKey = base58.decode(key)
+    if (isValid(key, decodedKey)) {
+      return base58.decode('1' + key)
+    } else {
+      assert(false, "invalid key: " + key)
+      return new Uint8Array(0)
+    }
+  }
+}
+
+export function isValid(key: PublicKey, decodedKey: Uint8Array): boolean {
+  // key cannot be blank
+  if (key == '') {
+    return false
+  }
+  // base58 encoded key must be 43-44 characters long (or 51 with prefix 'ed25519:')
+  if (![43, 44, 51].includes(key.length)) {
+    return false
+  }
+  // remove prefix if found
+  key = key.indexOf(':') > -1 ? key.split(':')[1] : key
+  // check decoded byte length
+  if (![32, 33].includes(decodedKey.byteLength)) {
+    return false
+  }
+  return true
 }

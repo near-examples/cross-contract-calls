@@ -729,9 +729,9 @@ array-unique@^0.3.2:
   integrity sha1-qJS3XUvE9s1nnvMkSp/Y9Gri1Cg=
 
 as-bignum@^0.2.4:
-  version "0.2.6"
-  resolved "https://registry.yarnpkg.com/as-bignum/-/as-bignum-0.2.6.tgz#2462357874395e940eebe9a05f8eaef9d5cb88f3"
-  integrity sha512-3FNvNp23mmfkhxDJekO8hcjC49jKkvCD1MKYjr/wk7tTiCgdpM+oSfzeFk+Ce8iZtIKXGWARbDjcs4XGmtnyAA==
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/as-bignum/-/as-bignum-0.2.8.tgz#46ac7a14cf9df951aa3fb850f1db44c0083d4e69"
+  integrity sha512-tac9YOYKDLlkiVFiucTsHRIEzd+LawAHfmxqucnfZmZ6TH4DGMzMBw5A6Zex0YWGNLaLHtPz/5z8nA5yyXryNg==
 
 asbuild@^0.0.8:
   version "0.0.8"
@@ -2699,33 +2699,33 @@ natural-compare@^1.4.0:
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
   integrity sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc=
 
-near-mock-vm@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/near-mock-vm/-/near-mock-vm-2.1.0.tgz#4d8a75e4b6f8e676531b227b0df62becb4f8332c"
-  integrity sha512-5u2YzyD59Sih8WGcER0BdBc3+hATPocHyXr3sKolaPU6AMbkgwbS6eeMncpUQaBuGQ8XWP4zuq474WFEGVFeEA==
+near-mock-vm@^2.1.2-next.0:
+  version "2.1.2-next.0"
+  resolved "https://registry.yarnpkg.com/near-mock-vm/-/near-mock-vm-2.1.2-next.0.tgz#71872d5e5c6cf06ac724035ea4cd4ca70220777c"
+  integrity sha512-M8vpyCBxEGwfUoGNu26i26fdrT8vxWuukAH7pfstBc5weIYhDpZlwRlQPZhC6RS9rTA7ropa/ZHIyMDBkjujHQ==
   dependencies:
     "@assemblyscript/loader" "^0.9.4"
     yargs "^15.3.1"
 
-near-sdk-as@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/near-sdk-as/-/near-sdk-as-2.1.0.tgz#f7b60766f36704a75f3dad78db72fdc9e1223b03"
-  integrity sha512-VBlMQCfisdQtu5VFstzv9lCnHBBnwc//ragovAx//UuHgxxHTlqpMHtwZA2pnavivN88YTVDfn4VfjvzijqleQ==
+near-sdk-as@2.1.2-next.0:
+  version "2.1.2-next.0"
+  resolved "https://registry.yarnpkg.com/near-sdk-as/-/near-sdk-as-2.1.2-next.0.tgz#dadfea8067d1c19e0e42807e59d97bbfc3ce4b2f"
+  integrity sha512-u2G/RO1CfbKCPOUNs/ROt2wwbeM/yaziT8oGTOxL6V5nc3HRjhl+nv9DiOybKTghMt4Ds48ugMYO2T8m2l3r9g==
   dependencies:
-    near-mock-vm "^2.1.0"
-    near-sdk-bindgen "^2.1.0"
-    near-sdk-core "^2.1.0"
-    near-sdk-simulator "^2.1.0"
+    near-mock-vm "^2.1.2-next.0"
+    near-sdk-bindgen "^2.1.2-next.0"
+    near-sdk-core "^2.1.2-next.0"
+    near-sdk-simulator "^2.1.2-next.0"
 
-near-sdk-bindgen@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/near-sdk-bindgen/-/near-sdk-bindgen-2.1.0.tgz#1815c88ff5094f1e23e3bc721ec3b95d45815cf2"
-  integrity sha512-vJ84mCnIBStYAqvl78+lDzHmGbnG3E7shgf+mOm6B2FmgTA3igwk86KqPMK2zWPtGF7kbXSnrfnr7vIY730jXw==
+near-sdk-bindgen@^2.1.2-next.0:
+  version "2.1.2-next.0"
+  resolved "https://registry.yarnpkg.com/near-sdk-bindgen/-/near-sdk-bindgen-2.1.2-next.0.tgz#54102e7dabf00993ebd65239fdc77cc6f5e8b0db"
+  integrity sha512-NNTuqQJO+OHkPr0HCjycq49PZlGD8LksuMWGfX+YwBpvWvQoVnmIaBp4P8uhKTG8+OT5mstwgBg9mjiuVzYAkA==
 
-near-sdk-core@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/near-sdk-core/-/near-sdk-core-2.1.0.tgz#674532d548cb244459de45b49470bc331cdec173"
-  integrity sha512-gRMyzqK4Ph/UzuxM8/wpuIVqvgkU0BT5+HQT0sQtr0eifWyJA4N8JZ7lOURXnXrfH3lHspb867IeC59qJ4Tj1w==
+near-sdk-core@^2.1.2-next.0:
+  version "2.1.2-next.0"
+  resolved "https://registry.yarnpkg.com/near-sdk-core/-/near-sdk-core-2.1.2-next.0.tgz#3001b92511adcb088a955a260c85b89e487ec33c"
+  integrity sha512-4pI8pRMuzIvImSjCqN/eD1DT0BzEx/UDN+S5quocX6OInhe9d6SiIMDAQAg+lWA7kIP2kcVmbUnpHVSFL2PwBA==
   dependencies:
     "@as-pect/cli" "^4.0.0"
     as-bignum "^0.2.4"
@@ -2738,10 +2738,10 @@ near-sdk-core@^2.1.0:
     near-vm "^1.1.0"
     visitor-as "^0.3.2"
 
-near-sdk-simulator@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/near-sdk-simulator/-/near-sdk-simulator-2.1.0.tgz#0477857106aab60f40dfea163620738e8c6881db"
-  integrity sha512-iEIBC0dc2jc5mm5iHhx13em5WJpIjnpeZAHrN1CY7K9wNEE3gaS+ljTu3wf9LlXNsUHsZsvRkDD/rPJ9RFb/DA==
+near-sdk-simulator@^2.1.2-next.0:
+  version "2.1.2-next.0"
+  resolved "https://registry.yarnpkg.com/near-sdk-simulator/-/near-sdk-simulator-2.1.2-next.0.tgz#9a7fd8ba6ebe217938d6e851c4d5f9ac58066d07"
+  integrity sha512-nN+ycaDemHKglT8G2qNLgoW8g2s7UV85iKkh1WD93/++V6FWP+YzR41N7pBO19Hohn44AXIQqD1B7uPYy0fCmA==
 
 near-vm@^1.1.0:
   version "1.1.0"

@@ -4,7 +4,7 @@ pub use linkdrop::*;
 
 #[cfg(test)]
 mod test {
-    use near_sdk::json_types::{Base58PublicKey};//, U128};
+    use near_sdk::{serde_json::json, json_types::{Base58PublicKey}};//, U128};
     use near_sdk_sim::near_crypto::{InMemorySigner, KeyType};
     use std::convert::TryInto;
 
@@ -62,42 +62,36 @@ mod test {
 
         let (master_account, linkdrop) = init();
 
-        let giver = InMemorySigner::from_seed("linkdrop", KeyType::ED25519, "giver");
-        // let ak = AccessKey::full_access();
-
-        let pk_str = giver.public_key.to_string();
-        // let pk: Base58PublicKey = pk_str.try_into().unwrap();
+        let sender = InMemorySigner::from_seed("linkdrop", KeyType::ED25519, "sender");
+        let receiver_id = InMemorySigner::from_seed("bob", KeyType::ED25519, "receiver_id");
+        let pk_str = sender.public_key.to_string();
+        println!("Public Key: {}", pk_str);
 
         // Deposit money to linkdrop contract.
-        let ACCESS_KEY_ALLOWANCE: u128 = 10 ^ 24; // 1 NEAR
+        let ACCESS_KEY_ALLOWANCE: u128 = to_yocto("1"); // 1 NEAR
+
+        // 2_428_189_312_141
 
         let res = call!(
             master_account,
             linkdrop.send(&pk_str),
-            deposit = ACCESS_KEY_ALLOWANCE * 100
+            deposit = ACCESS_KEY_ALLOWANCE * 1000
         );
-
         println!("{:#?}\n{:#?}\n", res, res.promise_results());
-        // Now, send new transaction to link drop contract.
-        let taker = InMemorySigner::from_seed("taker", KeyType::ED25519, "taker");
 
-        // master_account.create_transaction(receiver_id: AccountId)
 
-        // let context = VMContextBuilder::new()
-        //     .current_account_id(linkdrop())
-        //     .predecessor_account_id(linkdrop())
-        //     .signer_account_pk(pk.into())
-        //     .account_balance(deposit)
-        //     .finish();
+        let temp_linkdrop = linkdrop.user_account.switch_signer(sender);
 
-        // testing_env!(context);
 
-        // let pk2 = "2S87aQ1PM9o6eBcEXnTR5yBAVRTiNmvj8J8ngZ6FzSca"
-        //     .try_into()
-        //     .unwrap();
+        let res = call! (
+          temp_linkdrop,
+          linkdrop.create_account_and_claim(&"bob", &receiver_id.public_key.to_string())
+        );
+        res.assert_success();
+        let bob = master_account.switch_signer(receiver_id);
 
-        // contract.create_account_and_claim(bob(), pk2);
 
-        // TODO: verify that proper promises were created.
+        println!("{:#?}\n{:#?},\n{:#?}\n", res, bob.account(), res.promise_errors());
+
     }
 }
