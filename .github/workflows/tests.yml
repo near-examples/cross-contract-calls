@@ -4,7 +4,7 @@ jobs:
   workflows:
     strategy:
       matrix:
-        platform: [ubuntu-latest, macos-latest]
+        platform: [ubuntu-latest] # mac-os in development
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
@@ -12,8 +12,8 @@ jobs:
         with:
           node-version: "16"
       - name: Install modules
-        run: yarn
+        run: npm i
       - name: Build contract
-        run: yarn build
+        run: npm run build
       - name: Run tests
-        run: yarn test
+        run: npm run test

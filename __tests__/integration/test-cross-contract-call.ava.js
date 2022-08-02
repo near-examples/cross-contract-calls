@@ -9,13 +9,17 @@ test.beforeEach(async (t) => {
     const root = worker.rootAccount;
 
     // Deploy the onCall contract.
-    const xcc = await root.createAndDeploy(root.getSubAccount("xcc").accountId, "./build/xcc.wasm");
+    const xcc = await root.devDeploy("./build/xcc.wasm");
 
     // Deploy status-message the contract.
-    const helloNear = await root.createAndDeploy(root.getSubAccount("hello-near").accountId, "./extra/hello-near.wasm");
+    const helloNear = await root.createSubAccount("hello-near");
+    helloNear.deploy("./extra/hello-near.wasm");
 
     // Create test account alice
     const alice = await root.createSubAccount("alice");
+
+    // Initialize xcc
+    xcc.call(xcc, "init", { hello_account: helloNear.accountId });
 
     // Save state for test runs, it is unique for each test
     t.context.worker = worker;
@@ -33,25 +37,19 @@ test.afterEach(async (t) => {
     });
 });
 
-test("Initializes", async (t) => {
-    const { xcc } = t.context.accounts;
-    await xcc.call(xcc, "init", {});
-    t.pass();
-});
-
 test("returns the default greeting", async (t) => {
     const { xcc, alice } = t.context.accounts;
-    await xcc.call(xcc, "init", {});
+
     const message = await alice.call(xcc, "query_greeting", {}, { gas: 200000000000000 });
-    t.is(message, "Hello");
+    t.is(message, '"Hello"');
 });
 
 test("change the greeting", async (t) => {
     const { xcc, alice } = t.context.accounts;
-    await xcc.call(xcc, "init", {});
-    const hello = await alice.call(xcc, "query_greeting", {}, { gas: 200000000000000 });
-    t.is(hello, "Hello");
-    await alice.call(xcc, "change_greeting", { new_greeting: "Howdy" }, { gas: 200000000000000 });
+
+    const result = await alice.call(xcc, "change_greeting", { new_greeting: "Howdy" }, { gas: 200000000000000 });
+    t.is(result, true);
+
     const howdy = await alice.call(xcc, "query_greeting", {}, { gas: 200000000000000 });
-    t.is(howdy, "Howdy");
+    t.is(howdy, '"Howdy"');
 });
