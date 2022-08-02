@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "near-sdk-js build src/index.js build/xcc.wasm",
+    "build": "near-sdk-js build src/index.ts build/contract.wasm",
     "test": "ava"
   },
   "author": "Near Inc <hello@nearprotocol.com>",
@@ -16,6 +16,7 @@
   },
   "devDependencies": {
     "ava": "^4.2.0",
-    "near-workspaces": "^3.1.0"
+    "near-workspaces": "^3.1.0",
+    "typescript": "^4.7.4"
   }
 }
