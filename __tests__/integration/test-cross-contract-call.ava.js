@@ -7,19 +7,21 @@ test.beforeEach(async (t) => {
 
     // Prepare sandbox for tests, create accounts, deploy contracts, etx.
     const root = worker.rootAccount;
-
-    // Deploy the onCall contract.
-    const xcc = await root.devDeploy("./build/xcc.wasm");
+    console.log(`Root account: hello-near.${root.accountId}`);
 
     // Deploy status-message the contract.
-    const helloNear = await root.createSubAccount("hello-near");
-    helloNear.deploy("./extra/hello-near.wasm");
+    const helloNear = await root.devDeploy("./extra/hello-near.wasm");
+    console.log('helloNear: ', helloNear)
+    console.log('helloNear: ', helloNear.accountId)
 
+    // Deploy the onCall contract.
+    const xcc = await root.devDeploy("./build/contract.wasm", { method: "init", args: {helloAccount: helloNear.accountId} });
+    console.log('xcc: ', xcc)
+    console.log("xcc.accountId:", xcc.accountId);
+    
     // Create test account alice
     const alice = await root.createSubAccount("alice");
-
-    // Initialize xcc
-    xcc.call(xcc, "init", { hello_account: helloNear.accountId });
+    console.log('alice: ', alice)
 
     // Save state for test runs, it is unique for each test
     t.context.worker = worker;
@@ -39,17 +41,19 @@ test.afterEach(async (t) => {
 
 test("returns the default greeting", async (t) => {
     const { xcc, alice } = t.context.accounts;
+    console.log('alice: ', alice)
+    console.log('xcc: ', xcc)
 
-    const message = await alice.call(xcc, "query_greeting", {}, { gas: 200000000000000 });
+    const message = await alice.call(xcc, "queryGreeting", {}, { gas: 200000000000000 });
     t.is(message, '"Hello"');
 });
 
 test("change the greeting", async (t) => {
     const { xcc, alice } = t.context.accounts;
 
-    const result = await alice.call(xcc, "change_greeting", { new_greeting: "Howdy" }, { gas: 200000000000000 });
+    const result = await alice.call(xcc, "changeGreeting", { newGreeting: "Howdy" }, { gas: 200000000000000 });
     t.is(result, true);
 
-    const howdy = await alice.call(xcc, "query_greeting", {}, { gas: 200000000000000 });
+    const howdy = await alice.call(xcc, "queryGreeting", {}, { gas: 200000000000000 });
     t.is(howdy, '"Howdy"');
 });

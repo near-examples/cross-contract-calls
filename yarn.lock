@@ -1604,10 +1604,10 @@ near-sandbox@^0.0.12:
     got "^11.8.2"
     tar "^6.1.0"
 
-near-sdk-js@^0.4.0-4:
-  version "0.4.0-4"
-  resolved "https://registry.yarnpkg.com/near-sdk-js/-/near-sdk-js-0.4.0-4.tgz#8c30f3f2f6a0b82a210d04d86f6ccc3f939ee63d"
-  integrity sha512-p08dr7mTRJIhiV5VXQ0PkkqTqPOg1OPqqHwKheBZK/vGz24h7c/6Dn2aPC5kb7bzlOmZ4DJz9FsWqtAKFe19ng==
+near-sdk-js@^0.4.0-5:
+  version "0.4.0-5"
+  resolved "https://registry.yarnpkg.com/near-sdk-js/-/near-sdk-js-0.4.0-5.tgz#deb2ace9d0914bc5c9f43a517638b75cb9bdb746"
+  integrity sha512-lOQDc61vf4QvM2BJkaVJcRY21l4K46xKJXJbdKanqi/WCYnKLV5i0UUbJ4sjOcScS1BHZyitLWaAdLGCCzYniQ==
   dependencies:
     "@babel/core" "^7.17.5"
     "@babel/plugin-proposal-decorators" "^7.17.2"
@@ -1617,7 +1617,6 @@ near-sdk-js@^0.4.0-4:
     "@rollup/plugin-node-resolve" "^13.1.1"
     rollup "^2.61.1"
     rollup-plugin-sourcemaps "^0.6.3"
-    superserial "^0.3.0"
     yargs "^17.5.1"
 
 near-units@^0.1.9:
@@ -2021,11 +2020,6 @@ strip-ansi@^7.0.1:
   integrity sha512-cXNxvT8dFNRVfhVME3JAe98mkXDYN2O1l7jmcwMnOslDeESg1rF/OZMtK0nRAhiari1unG5cD4jG3rapUAkLbw==
   dependencies:
     ansi-regex "^6.0.1"
-
-superserial@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.npmjs.org/superserial/-/superserial-0.3.0.tgz"
-  integrity sha512-whx28H+uq/0eIoCkLVpRRhpBqjHTfdzugiNv0mIJicBNdm9Z5qKcs9yDx0hvOtL7+JiYKYamxPUO0EWGxAAZBw==
 
 supertap@^3.0.1:
   version "3.0.1"
