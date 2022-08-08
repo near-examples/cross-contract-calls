@@ -1,6 +1,8 @@
-# NEAR-SDK-JS template project
+# Cross-Contract Call JS
 
-This is a template project. It implements a counter. You can copy this folder to start writing your first contract.
+This example performs the simplest cross-contract call possible: it calls our [Hello NEAR example](https://github.com/near-examples/hello-near-js) to set and retrieve a greeting.
+
+---
 
 # Build the contract
 
