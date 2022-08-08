@@ -7,21 +7,15 @@ test.beforeEach(async (t) => {
 
     // Prepare sandbox for tests, create accounts, deploy contracts, etx.
     const root = worker.rootAccount;
-    console.log(`Root account: hello-near.${root.accountId}`);
 
     // Deploy status-message the contract.
     const helloNear = await root.devDeploy("./extra/hello-near.wasm");
-    console.log('helloNear: ', helloNear)
-    console.log('helloNear: ', helloNear.accountId)
 
     // Deploy the onCall contract.
     const xcc = await root.devDeploy("./build/contract.wasm", { method: "init", args: {helloAccount: helloNear.accountId} });
-    console.log('xcc: ', xcc)
-    console.log("xcc.accountId:", xcc.accountId);
     
     // Create test account alice
     const alice = await root.createSubAccount("alice");
-    console.log('alice: ', alice)
 
     // Save state for test runs, it is unique for each test
     t.context.worker = worker;
@@ -41,8 +35,6 @@ test.afterEach(async (t) => {
 
 test("returns the default greeting", async (t) => {
     const { xcc, alice } = t.context.accounts;
-    console.log('alice: ', alice)
-    console.log('xcc: ', xcc)
 
     const message = await alice.call(xcc, "queryGreeting", {}, { gas: 200000000000000 });
     t.is(message, '"Hello"');
