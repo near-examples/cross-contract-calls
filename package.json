@@ -1,8 +1,9 @@
 {
-  "name": "./releases/xcc-js",
+  "name": "xcc-js",
   "version": "1.0.0",
   "license": "(MIT AND Apache-2.0)",
   "scripts": {
+    "start": "echo no frontend",
     "deploy": "cd contract && npm run deploy",
     "build": "npm run build:contract",
     "build:contract": "cd contract && npm run build",
