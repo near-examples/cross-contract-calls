@@ -12,8 +12,6 @@ jobs:
         with:
           node-version: "16"
       - name: Install modules
-        run: npm i
-      - name: Build contract
-        run: npm run build
+        run: yarn
       - name: Run tests
-        run: npm run test
+        run: yarn test
