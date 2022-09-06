@@ -1,8 +1,8 @@
-# Cross-Contract Hello 
+# 📞 Cross-Contract Hello 
 [![](https://img.shields.io/badge/⋈%20Examples-Basics-green)](https://docs.near.org/tutorials/welcome)
 [![](https://img.shields.io/badge/Gitpod-Ready-orange)](https://gitpod.io/#/https://github.com/near-examples/xcc-js)
 [![](https://img.shields.io/badge/Contract-js-yellow)](https://docs.near.org/develop/contracts/anatomy)
-[![](https://img.shields.io/badge/Frontend-gray-none)](#)
+[![](https://img.shields.io/badge/Frontend-none-inactive)](#)
 [![](https://img.shields.io/badge/Testing-passing-green)](https://docs.near.org/develop/integrate/frontend)
 
 
