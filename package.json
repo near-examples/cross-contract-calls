@@ -1,22 +1,19 @@
 {
-  "name": "template",
+  "name": "xcc-js",
   "version": "1.0.0",
-  "description": "Contract template with near-sdk-js",
-  "main": "index.js",
-  "type": "module",
+  "license": "(MIT AND Apache-2.0)",
   "scripts": {
-    "build": "near-sdk-js build src/index.ts build/contract.wasm",
-    "test": "ava"
-  },
-  "author": "Near Inc <hello@nearprotocol.com>",
-  "license": "Apache-2.0",
-  "dependencies": {
-    "near-sdk-js": "^0.4.0-5",
-    "lodash-es": "^4.17.21"
+    "start": "echo no frontend",
+    "deploy": "cd contract && npm run deploy",
+    "build": "npm run build:contract",
+    "build:contract": "cd contract && npm run build",
+    "test": "npm run build:contract && npm run test:unit && npm run test:integration",
+    "test:unit": "cd contract && npm test",
+    "test:integration": "cd integration-tests && npm test -- -- \"./contract/build/contract.wasm\"",
+    "postinstall": "echo no frontend && cd integration-tests && npm install && cd .. && cd contract && npm install"
   },
   "devDependencies": {
-    "ava": "^4.2.0",
-    "near-workspaces": "^3.1.0",
-    "typescript": "^4.7.4"
-  }
+    "near-cli": "^3.3.0"
+  },
+  "dependencies": {}
 }
