@@ -59,8 +59,7 @@ npm run deploy
 Once finished, check the `neardev/dev-account` file to find the address in which the contract was deployed:
 
 ```bash
-cat ./neardev/dev-account
-# e.g. dev-1659899566943-21539992274727
+cat ./neardev/dev-account  # dev-1659899566943-21539992274727
 ```
 
 <br />
@@ -72,7 +71,7 @@ cat ./neardev/dev-account
 `Call` methods can only be invoked using a NEAR account, since the account needs to pay GAS for the transaction.
 
 ```bash
-# Use near-cli to ask the contract to query te greeting
+# Use near-cli to ask the contract to query the greeting
 near call <dev-account> query_greeting --accountId <dev-account>
 ```
 
@@ -84,7 +83,7 @@ near call <dev-account> query_greeting --accountId <dev-account>
 `Call` methods can only be invoked using a NEAR account, since the account needs to pay GAS for the transaction.
 
 ```bash
-# Use near-cli to set increment the counter
+# Use near-cli to change the greeting
 near call <dev-account> change_greeting '{"new_greeting":"XCC Hi"}' --accountId <dev-account>
 ```
 
