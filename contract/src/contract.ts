@@ -1,4 +1,5 @@
 import { NearBindgen, initialize, call, near, bytes, NearPromise } from "near-sdk-js";
+import { AccountId } from "near-sdk-js/lib/types";
 
 const FIVE_TGAS = BigInt("50000000000000");
 const NO_DEPOSIT = BigInt(0);
@@ -6,15 +7,15 @@ const NO_ARGS = bytes(JSON.stringify({}));
 
 @NearBindgen({})
 class CrossContractCall {
-  hello_account: string = "hello-nearverse.testnet";
+  hello_account: AccountId = "hello-nearverse.testnet";
 
   @initialize({})
-  init({ hello_account }: { hello_account: string }) {
+  init({ hello_account }: { hello_account: AccountId }) {
     this.hello_account = hello_account
   }
 
   @call({})
-  query_greeting() {
+  query_greeting(): NearPromise {
     const promise = NearPromise.new(this.hello_account)
     .functionCall("get_greeting", NO_ARGS, NO_DEPOSIT, FIVE_TGAS)
     .then(
@@ -26,12 +27,11 @@ class CrossContractCall {
   }
 
   @call({privateFunction: true})
-  query_greeting_callback() {
+  query_greeting_callback(): String {
     let {result, success} = promiseResult()
 
     if (success) {
-      const greeting: String = result as String;
-      return greeting.substring(1, greeting.length-1);
+      return result.substring(1, result.length-1);
     } else {
       near.log("Promise failed...")
       return ""
@@ -39,7 +39,7 @@ class CrossContractCall {
   }
 
   @call({})
-  change_greeting({ new_greeting }: { new_greeting: string }) {
+  change_greeting({ new_greeting }: { new_greeting: string }): NearPromise {
     const promise = NearPromise.new(this.hello_account)
     .functionCall("set_greeting", bytes(JSON.stringify({ greeting: new_greeting })), NO_DEPOSIT, FIVE_TGAS)
     .then(
@@ -51,11 +51,11 @@ class CrossContractCall {
   }
 
   @call({privateFunction: true})
-  change_greeting_callback() {
-    let { result, success } = promiseResult()
+  change_greeting_callback(): boolean {
+    let { success } = promiseResult()
 
     if (success) {
-      near.log(`Success! the result is ${result}`)
+      near.log(`Success!`)
       return true
     } else {
       near.log("Promise failed...")
@@ -64,7 +64,7 @@ class CrossContractCall {
   }
 }
 
-function promiseResult(){
+function promiseResult(): {result: string, success: boolean}{
   let result, success;
   
   try{ result = near.promiseResult(0); success = true }
