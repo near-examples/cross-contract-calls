@@ -27,8 +27,15 @@ class CrossContractCall {
 
   @call({privateFunction: true})
   query_greeting_callback() {
-    const greeting = near.promiseResult(0) as String;
-    return greeting.substring(1, greeting.length-1);
+    let {result, success} = promiseResult()
+
+    if (success) {
+      const greeting: String = result as String;
+      return greeting.substring(1, greeting.length-1);
+    } else {
+      near.log("Promise failed...")
+      return ""
+    }
   }
 
   @call({})
@@ -45,13 +52,23 @@ class CrossContractCall {
 
   @call({privateFunction: true})
   change_greeting_callback() {
-    
-    if (near.promiseResultsCount() == BigInt(1)) {
-      near.log("Promise was successful!")
+    let { result, success } = promiseResult()
+
+    if (success) {
+      near.log(`Success! the result is ${result}`)
       return true
     } else {
       near.log("Promise failed...")
       return false
     }
   }
+}
+
+function promiseResult(){
+  let result, success;
+  
+  try{ result = near.promiseResult(0); success = true }
+  catch{ result = undefined; success = false }
+  
+  return {result, success}
 }
