@@ -1,4 +1,6 @@
 # Complex Cross-Contract Calls
+[![](https://img.shields.io/github/workflow/status/near-examples/xcc-advanced/Tests/main?color=green&label=Tests)](https://github.com/near-examples/xcc-advanced/actions/workflows/tests.yml)
+
 
 This contract presents 3 examples on how to do complex cross-contract calls. Particularly, it shows:
 
