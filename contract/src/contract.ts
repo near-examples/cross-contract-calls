@@ -3,7 +3,7 @@ import { AccountId } from "near-sdk-js/lib/types";
 
 const FIVE_TGAS = BigInt("50000000000000");
 const NO_DEPOSIT = BigInt(0);
-const NO_ARGS = bytes(JSON.stringify({}));
+const NO_ARGS = JSON.stringify({});
 
 @NearBindgen({})
 class CrossContractCall {
@@ -41,7 +41,7 @@ class CrossContractCall {
   @call({})
   change_greeting({ new_greeting }: { new_greeting: string }): NearPromise {
     const promise = NearPromise.new(this.hello_account)
-    .functionCall("set_greeting", bytes(JSON.stringify({ greeting: new_greeting })), NO_DEPOSIT, FIVE_TGAS)
+    .functionCall("set_greeting", JSON.stringify({ greeting: new_greeting }), NO_DEPOSIT, FIVE_TGAS)
     .then(
       NearPromise.new(near.currentAccountId())
       .functionCall("change_greeting_callback", NO_ARGS, NO_DEPOSIT, FIVE_TGAS)
