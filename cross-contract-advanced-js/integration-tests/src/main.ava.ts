@@ -1,37 +1,50 @@
-import { Worker, NearAccount } from 'near-workspaces';
-import anyTest, { TestFn } from 'ava';
+import { Worker, NearAccount } from "near-workspaces";
+import anyTest, { TestFn } from "ava";
 
 const test = anyTest as TestFn<{
   worker: Worker;
   accounts: Record<string, NearAccount>;
 }>;
 
+type PremiumMessage = { premium: boolean; sender: string; text: string };
+
 test.beforeEach(async (t) => {
   // Init the worker and start a Sandbox server
   const worker = await Worker.init();
 
-  // Prepare sandbox for tests, create accounts, deploy contracts, etx.
+  // Get root account
   const root = worker.rootAccount;
-  
-  // Create test account alice
+
+  // Create test accounts
   const alice = await root.createSubAccount("alice");
   const xcc = await root.createSubAccount("xcc");
   const helloNear = await root.createSubAccount("hello-near");
+  const guestBook = await root.createSubAccount("guest-book");
+  const counter = await root.createSubAccount("counter");
 
-  // Deploy the hello near contract
-  await helloNear.deploy("./src/hello-near/hello-near.wasm")
+  // Deploy external contracts
+  await helloNear.deploy("./src/external-contracts/hello-near.wasm");
+  await guestBook.deploy("./src/external-contracts/guest-book.wasm");
+  await counter.deploy("./src/external-contracts/counter.wasm");
 
-  // Deploy the xcc contract.
+  // Deploy xcc contract
   await xcc.deploy(process.argv[2]);
-  await xcc.call(xcc, "init", {hello_account: helloNear.accountId})
+
+  // Initialize xcc contract
+  await xcc.call(xcc, "init", {
+    hello_account: helloNear.accountId,
+    counter_account: counter.accountId,
+    guestbook_account: guestBook.accountId,
+  });
 
   // Save state for test runs, it is unique for each test
   t.context.worker = worker;
   t.context.accounts = {
-    root,
-    helloNear,
     xcc,
     alice,
+    helloNear,
+    counter,
+    guestBook,
   };
 });
 
@@ -41,19 +54,46 @@ test.afterEach(async (t) => {
   });
 });
 
-test("returns the default greeting", async (t) => {
-  const { xcc, alice } = t.context.accounts;
+test("multiple_contract tests", async (t) => {
+  const { xcc, alice, helloNear, counter, guestBook } = t.context.accounts;
 
-  const greeting = await alice.call(xcc, "query_greeting", {}, { gas: "200000000000000" });
-  t.is(greeting, 'Hello');
+  await alice.call(counter, "decrement", {});
+  await alice.call(helloNear, "set_greeting", { greeting: "Howdy" });
+  await alice.call(
+    guestBook,
+    "add_message",
+    { text: "my message" },
+    { gas: "40000000000000" }
+  );
+
+  const results: [string, number, [PremiumMessage]] = await alice.call(
+    xcc,
+    "multiple_contracts",
+    {},
+    { gas: "300000000000000" }
+  );
+
+  const expected = {
+    premium: false,
+    sender: "alice.test.near",
+    text: "my message",
+  };
+
+  t.is(results[0], "Howdy");
+  t.is(results[1], -1);
+  t.deepEqual(results[2], [expected]);
+  t.pass();
 });
 
-test("change the greeting", async (t) => {
+test("batch_actions", async (t) => {
   const { xcc, alice } = t.context.accounts;
 
-  const result = await alice.call(xcc, "change_greeting", { new_greeting: "Howdy" }, { gas: "200000000000000" });
-  t.is(result, true);
+  const result: string = await alice.call(
+    xcc,
+    "batch_actions",
+    {},
+    { gas: "300000000000000" }
+  );
 
-  const howdy = await alice.call(xcc, "query_greeting", {}, { gas: "200000000000000" });
-  t.is(howdy, 'Howdy');
+  t.deepEqual(result, "bye");
 });
