@@ -26,13 +26,13 @@ impl Contract {
         hello_one.and(hello_two).and(hello_three).then(
             Self::ext(env::current_account_id())
                 .with_static_gas(XCC_GAS)
-                .similar_contracts_callback(),
+                .similar_contracts_callback(3),
         )
     }
 
     #[private]
-    pub fn similar_contracts_callback(&self) -> Vec<String> {
-        (0..3)
+    pub fn similar_contracts_callback(&self, number_promises: u64) -> Vec<String> {
+        (0..number_promises)
             .filter_map(|index| {
                 // env::promise_result(i) has the result of the i-th call
                 let result = env::promise_result(index);
