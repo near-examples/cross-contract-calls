@@ -26,6 +26,7 @@ test.beforeEach(async (t) => {
   await helloNear.deploy("./src/external-contracts/hello-near.wasm");
   await guestBook.deploy("./src/external-contracts/guest-book.wasm");
   await counter.deploy("./src/external-contracts/counter.wasm");
+
   // Deploy xcc contract
   await xcc.deploy(process.argv[2]);
 
@@ -53,67 +54,61 @@ test.afterEach(async (t) => {
   });
 });
 
-// test("multiple_contract tests", async (t) => {
-//   const { xcc, alice, helloNear, counter, guestBook } = t.context.accounts;
+test("multiple_contract tests", async (t) => {
+  const { xcc, alice, helloNear, counter, guestBook } = t.context.accounts;
 
-//   await alice.call(counter, "decrement", {});
-//   await alice.call(helloNear, "set_greeting", { greeting: "Howdy" });
-//   await alice.call(
-//     guestBook,
-//     "add_message",
-//     { text: "my message" },
-//     { gas: "40000000000000" }
-//   );
+  await alice.call(counter, "decrement", {});
+  await alice.call(helloNear, "set_greeting", { greeting: "Howdy" });
+  await alice.call(
+    guestBook,
+    "add_message",
+    { text: "my message" },
+    { gas: "40000000000000" }
+  );
 
-//   const results: [string, number, [PremiumMessage]] = await alice.call(
-//     xcc,
-//     "multiple_contracts",
-//     {},
-//     { gas: "300000000000000" }
-//   );
+  const results: [string, string, [PremiumMessage]] = await alice.call(
+    xcc,
+    "multiple_contracts",
+    {},
+    { gas: "300000000000000" }
+  );
 
-//   const expected = {
-//     premium: false,
-//     sender: "alice.test.near",
-//     text: "my message",
-//   };
+  const expected = {
+    premium: false,
+    sender: "alice.test.near",
+    text: "my message",
+  };
 
-//   t.is(results[0], "Howdy");
-//   t.is(results[1], -1);
-//   t.deepEqual(results[2], [expected]);
-//   t.pass();
-// });
-
-// test("similar_contracts", async (t) => {
-//   const { xcc, alice } = t.context.accounts;
-
-//   const results: [[string]] = await alice.call(
-//     xcc,
-//     "similar_contracts",
-//     {},
-//     { gas: "300000000000000" }
-//   );
-
-//   const expected = ["hi", "howdy", "bye"];
-
-//   t.deepEqual(results, expected);
-// });
-test("returns the default greeting", async (t) => {
-  const { xcc, alice } = t.context.accounts;
-
-  const greeting = await alice.call(xcc, "query_greeting", {}, { gas: "200000000000000" });
-  t.is(greeting, 'Hello');
+  t.is(results[0], '"Howdy"');
+  t.is(results[1], '-1');
+  t.deepEqual(results[2], JSON.stringify([expected]));
+  t.pass();
 });
 
-// test("batch_actions", async (t) => {
-//   const { xcc, alice } = t.context.accounts;
+test("similar_contracts", async (t) => {
+  const { xcc, alice } = t.context.accounts;
 
-//   const result: string = await alice.call(
-//     xcc,
-//     "batch_actions",
-//     {},
-//     { gas: "300000000000000" }
-//   );
+  const results: [[string]] = await alice.call(
+    xcc,
+    "similar_contracts",
+    {},
+    { gas: "300000000000000" }
+  );
 
-//   t.deepEqual(result, "bye");
-// });
+  const expected = ['"hi"', '"howdy"', '"bye"'];
+
+  t.deepEqual(results, expected);
+});
+
+test("batch_actions", async (t) => {
+  const { xcc, alice } = t.context.accounts;
+
+  const result: string = await alice.call(
+    xcc,
+    "batch_actions",
+    {},
+    { gas: "300000000000000" }
+  );
+
+  t.deepEqual(result, '"bye"');
+});

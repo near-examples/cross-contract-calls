@@ -1,13 +1,9 @@
 import { NearBindgen, initialize, call, near, NearPromise } from "near-sdk-js";
 import { AccountId } from "near-sdk-js/lib/types";
+import { batch_actions as internal_batch_actions, batch_actions_callback as internal_batch_actions_callback} from "./internal/batch_actions";
+import { multiple_contracts as internal_multiple_contracts, multiple_contracts_callback as internal_multiple_contracts_callback } from "./internal/multiple_contracts";
+import { similar_contracts as internal_similar_contracts, similar_contracts_callback as internal_similar_contracts_callback} from "./internal/similar_contratcs";
 
-import { internal_batch_actions } from "./internal/methods/internal_batch_actions";
-import { internal_multiple_contracts } from "./internal/methods/internal_multiple_contracts";
-
-import { internal_batch_actions_callback } from "./internal/callbacks/internal_batch_actions_callback";
-import { internal_multiple_contracts_callback } from "./internal/callbacks/internal_multiple_contracts_callback";
-import { FIVE_TGAS, NO_ARGS, NO_DEPOSIT, TEN_TGAS } from "./internal/constants";
-import { promiseResult } from "./internal/utils";
 
 @NearBindgen({})
 export class CrossContractCall {
@@ -28,30 +24,6 @@ export class CrossContractCall {
     this.hello_account = hello_account;
     this.guestbook_account = guestbook_account;
     this.counter_account = counter_account;
-  }
-
-  @call({})
-  query_greeting(): NearPromise {
-    const promise = NearPromise.new(this.hello_account)
-    .functionCall("get_greeting", NO_ARGS, NO_DEPOSIT, FIVE_TGAS)
-    .then(
-      NearPromise.new(near.currentAccountId())
-      .functionCall("query_greeting_callback", NO_ARGS, NO_DEPOSIT, TEN_TGAS)
-    )
-    
-    return promise.asReturn();
-  }
-
-  @call({ privateFunction: true })
-  query_greeting_callback(): String {
-    let { result, success } = promiseResult(0);
-
-    if (success) {
-      return result.substring(1, result.length-1);
-    } else {
-      near.log("Promise failed...")
-      return ""
-    }
   }
 
   @call({})
@@ -76,5 +48,19 @@ export class CrossContractCall {
     number_promises: number;
   }): string[] | string {
     return internal_multiple_contracts_callback(number_promises);
+  }
+
+  @call({})
+  similar_contracts(): NearPromise {
+    return internal_similar_contracts(this);
+  }
+
+  @call({ privateFunction: true })
+  similar_contracts_callback({
+    number_promises,
+  }: {
+    number_promises: number;
+  }): string[] | string {
+    return internal_similar_contracts_callback(number_promises);
   }
 }

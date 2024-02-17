@@ -8,6 +8,7 @@ export function promiseResult(index: number): { result: string, success: boolean
     success = true;
   } catch (err){
     near.log(err.message);
+    throw err;
     result = undefined;
     success = false;
   }
