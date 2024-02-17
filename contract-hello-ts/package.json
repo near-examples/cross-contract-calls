@@ -1,0 +1,19 @@
+{
+  "name": "contract",
+  "version": "1.0.0",
+  "license": "(MIT AND Apache-2.0)",
+  "type": "module",
+  "scripts": {
+    "build": "near-sdk-js build src/contract.ts build/cross_contract.wasm",
+    "test": "$npm_execpath run build && cd sandbox-ts && $npm_execpath run test -- -- ../build/cross_contract.wasm",
+    "postinstall": "cd sandbox-ts && $npm_execpath install"
+  },
+  "dependencies": {
+    "near-cli": "^3.5.0",
+    "near-sdk-js": "1.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.8.4",
+    "ts-morph": "^16.0.0"
+  }
+}
