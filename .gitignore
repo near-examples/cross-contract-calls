@@ -1,22 +1,13 @@
-contract-advanced-rs/sandbox-ts/node_modules
-contract-advanced-rs/sandbox-ts/package-lock.json
-contract-advanced-rs/target
-contract-advanced-rs/Cargo.lock
+**/sandbox-ts/node_modules
+**/sandbox-ts/package-lock.json
+**/target
+**/Cargo.lock
 
-contract-advanced-ts/build
-contract-advanced-ts/node_modules
-contract-advanced-ts/sandbox-ts/node_modules
-contract-advanced-ts/sandbox-ts/package-lock.json
-contract-advanced-ts/sandbox-ts/yarn.lock
+**/build
+**/node_modules
+**/sandbox-ts/node_modules
+**/sandbox-ts/package-lock.json
+**/sandbox-ts/yarn.lock
 
-contract-hello-rs/sandbox-ts/node_modules
-contract-hello-rs/sandbox-ts/package-lock.json
-contract-hello-rs/target
-contract-hello-rs/Cargo.lock
 
-contract-hello-ts/build
-contract-hello-ts/node_modules
-contract-hello-ts/sandbox-ts/node_modules
-contract-hello-ts/sandbox-ts/package-lock.json
-contract-hello-ts/sandbox-ts/yarn.lock
-contract-hello-ts/yarn.lock
+

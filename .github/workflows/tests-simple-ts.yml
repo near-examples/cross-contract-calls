@@ -1,4 +1,4 @@
-name: Tests Contract TS
+name: Tests Contract Simple TS
 on: push
 jobs:
   workflows:
@@ -13,6 +13,6 @@ jobs:
           node-version: "16"
       - name: Install and test modules
         run: |
-          cd ./contract-ts
+          cd ./contract-simple-ts
           yarn
           yarn test
