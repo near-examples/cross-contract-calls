@@ -1,9 +1,17 @@
 import { NearBindgen, initialize, call, near, NearPromise } from "near-sdk-js";
 import { AccountId } from "near-sdk-js/lib/types";
-import { batch_actions as internal_batch_actions, batch_actions_callback as internal_batch_actions_callback} from "./internal/batch_actions";
-import { multiple_contracts as internal_multiple_contracts, multiple_contracts_callback as internal_multiple_contracts_callback } from "./internal/multiple_contracts";
-import { similar_contracts as internal_similar_contracts, similar_contracts_callback as internal_similar_contracts_callback} from "./internal/similar_contratcs";
-
+import {
+  batch_actions as internal_batch_actions,
+  batch_actions_callback as internal_batch_actions_callback,
+} from "./internal/batch_actions";
+import {
+  multiple_contracts as internal_multiple_contracts,
+  multiple_contracts_callback as internal_multiple_contracts_callback,
+} from "./internal/multiple_contracts";
+import {
+  similar_contracts as internal_similar_contracts,
+  similar_contracts_callback as internal_similar_contracts_callback,
+} from "./internal/similar_contratcs";
 
 @NearBindgen({})
 export class CrossContractCall {
@@ -42,11 +50,7 @@ export class CrossContractCall {
   }
 
   @call({ privateFunction: true })
-  multiple_contracts_callback({
-    number_promises,
-  }: {
-    number_promises: number;
-  }): string[] | string {
+  multiple_contracts_callback({ number_promises }: { number_promises: number;}): string[] {
     return internal_multiple_contracts_callback(number_promises);
   }
 
@@ -56,11 +60,7 @@ export class CrossContractCall {
   }
 
   @call({ privateFunction: true })
-  similar_contracts_callback({
-    number_promises,
-  }: {
-    number_promises: number;
-  }): string[] | string {
+  similar_contracts_callback({ number_promises }: { number_promises: number;}): string[] {
     return internal_similar_contracts_callback(number_promises);
   }
 }

@@ -1,16 +1,41 @@
 # Complex Cross-Contract Calls Examples
 
-[![](https://img.shields.io/github/workflow/status/near-examples/xcc-advanced/Tests/main?color=green&label=Tests)](https://github.com/near-examples/xcc-advanced/actions/workflows/tests.yml)
-
 This contract presents 3 examples on how to do complex cross-contract calls. Particularly, it shows:
 
 1. How to batch method calls to a same contract.
 2. How to call multiple contracts in parallel, each returning a different type.
 3. Different ways of handling the responses in the callback.
 
-<br />
 
-## 1. Batch Actions
+
+## Structure of the Contract
+
+```bash
+┌── sandbox-ts # sandbox testing
+│    ├── src
+│    │    ├── external-contracts
+│    │    │    ├── counter.wasm
+│    │    │    ├── guest-book.wasm
+│    │    │    └── hello-near.wasm
+│    │    └── main.ava.ts
+│    ├── ava.config.cjs
+│    └── package.json
+├── package.json
+├── src # contract's code
+│    ├── batch_actions.rs
+│    ├── lib.rs
+│    ├── multiple_contracts.rs
+│    └── similar_contracts.rs
+├── build.sh # build script
+├── Cargo.toml # package manager
+├── README.md
+├── rust-toolchain.toml
+└── test.sh # test script
+```
+
+## Smart Contract
+
+### 1. Batch Actions
 
 You can aggregate multiple actions directed towards one same contract into a batched transaction.
 Methods called this way are executed sequentially, with the added benefit that, if one fails then
@@ -31,7 +56,7 @@ action** from the chain.
 
 <br />
 
-## 2. Calling Multiple Contracts
+### 2. Calling Multiple Contracts
 
 A contract can call multiple other contracts. This creates multiple transactions that execute
 all in parallel. If one of them fails the rest **ARE NOT REVERTED**.
@@ -55,7 +80,7 @@ value returned by each call, or an error message.
 
 <br />
 
-## 3. Calling Contracts With the Same Return Type
+### 3. Calling Contracts With the Same Return Type
 
 This example is a particular case of the previous one ([2. Calling Multiple Contracts](#2-calling-multiple-contracts)).
 It simply showcases a different way to check the results by directly accessing the `promise_result` array.
@@ -76,4 +101,25 @@ for index in 0..3 {
     ...
   }
 }
+```
+---
+## Quickstart
+
+
+
+1. Make sure you have installed [Rust](https://www.rust-lang.org/tools/install)
+2. Install the [`NEAR CLI`](https://github.com/near/near-cli#setup)
+
+
+## Build and Test the Contract
+The contract readily includes a set of unit and sandbox testing to validate its functionality. To execute the tests, run the following commands:
+
+
+
+```bash
+# To solely build the contract
+./build.sh
+
+# To build and execute the contract's tests
+./test.sh
 ```

@@ -2,6 +2,28 @@
 
 The smart contract implements the simplest form of cross-contract calls: it calls the [Hello NEAR example](https://docs.near.org/tutorials/examples/hello-near) to get and set a greeting.
 
+## Structure of the Example
+
+```bash
+┌── sandbox-ts # sandbox testing
+│    ├── src
+│    │    ├── hello-near
+│    │    │    └── hello-near.wasm
+│    │    └── main.ava.ts
+│    ├── ava.config.cjs
+│    └── package.json
+├── src # contract's code
+│    ├── external.rs
+│    └── lib.rs
+├── build.sh # build script
+├── Cargo.toml # package manager
+├── README.md
+├── rust-toolchain.toml
+└── test.sh # test script
+```
+
+## Smart Contract
+
 ```rust
 // Public - query external greeting
 pub fn query_greeting(&self) -> Promise {
@@ -9,7 +31,7 @@ pub fn query_greeting(&self) -> Promise {
   let promise = hello_near::ext(self.hello_account.clone())
     .with_static_gas(Gas(5*TGAS))
     .get_greeting();
-  
+
   return promise.then( // Create a promise to callback query_greeting_callback
     Self::ext(env::current_account_id())
     .with_static_gas(Gas(5*TGAS))
@@ -58,56 +80,53 @@ pub fn change_greeting_callback(&mut self, #[callback_result] call_result: Resul
 
 <br />
 
-# Quickstart
+---
 
-1. Make sure you have installed [rust](https://rust.org/).
+## Quickstart
+
+
+
+1. Make sure you have installed [Rust](https://www.rust-lang.org/tools/install)
 2. Install the [`NEAR CLI`](https://github.com/near/near-cli#setup)
 
-<br />
 
-## 1. Build and Deploy the Contract
-You can automatically compile and deploy the contract in the NEAR testnet by running:
+## Build and Test the Contract
+The contract readily includes a set of unit and sandbox testing to validate its functionality. To execute the tests, run the following commands:
 
-```bash
-./deploy.sh
-```
 
-Once finished, check the `neardev/dev-account` file to find the address in which the contract was deployed:
 
 ```bash
-cat ./neardev/dev-account  # dev-1659899566943-21539992274727
+# To solely build the contract
+./build.sh
+
+# To build and execute the contract's tests
+./test.sh
 ```
 
-<br />
+## Deploying the Contract to the NEAR network
 
-## 2. Get the Greeting
-
-`query_greeting` performs a cross-contract call, calling the `get_greeting()` method from `hello-nearverse.testnet`.
-
-`Call` methods can only be invoked using a NEAR account, since the account needs to pay GAS for the transaction.
+In order to deploy the contract you will need to [create a NEAR account](https://docs.near.org/develop/contracts/quickstart#create-a-testnet-account).
 
 ```bash
-# Use near-cli to ask the contract to query the greeting
-near call <dev-account> query_greeting --accountId <dev-account>
+# Optional - create an account
+near create-account <accountId> --useFaucet
+
+# Deploy the contract
+./build.sh
+
+near deploy <accountId> contract.wasm init '{"hello_account":"hello.near-example.testnet"}' 
 ```
+### CLI: Interacting with the Contract
 
-<br />
-
-## 3. Set a New Greeting
-`change_greeting` performs a cross-contract call, calling the `set_greeting({greeting:String})` method from `hello-nearverse.testnet`.
-
-`Call` methods can only be invoked using a NEAR account, since the account needs to pay GAS for the transaction.
+To interact with the contract through the console, you can use the following commands
 
 ```bash
-# Use near-cli to change the greeting
-near call <dev-account> change_greeting '{"new_greeting":"XCC Hi"}' --accountId <dev-account>
+
+# Get message from the hello-near contract
+# Replace <accountId> with your account ID
+near call <accountId> query_greeting --accountId <accountId>
+
+# Set a new message for the hello-near contract
+# Replace <accountId> with your account ID
+near call <accountId> change_greeting '{"new_greeting":"XCC Hi"}' --accountId <accountId>
 ```
-
-**Tip:** If you would like to call `change_greeting` or `query_greeting` using your own account, first login into NEAR using:
-
-```bash
-# Use near-cli to login your NEAR account
-near login
-```
-
-and then use the logged account to sign the transaction: `--accountId <your-account>`.

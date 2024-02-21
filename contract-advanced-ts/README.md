@@ -1,97 +1,130 @@
-# Cross-Contract Hello Contract
+# Complex Cross-Contract Calls Examples
 
-The smart contract implements the simplest form of cross-contract calls: it calls the [Hello NEAR example](https://docs.near.org/tutorials/examples/hello-near) to get and set a greeting.
+This contract presents 3 examples on how to do complex cross-contract calls. Particularly, it shows:
+
+1. How to batch method calls to a same contract.
+2. How to call multiple contracts in parallel, each returning a different type.
+3. Different ways of handling the responses in the callback.
+
+
+
+## Structure of the Example
+
+```bash
+┌── sandbox-ts # sandbox testing
+│    ├── src
+│    │    ├── external-contracts
+│    │    │    ├── counter.wasm
+│    │    │    ├── guest-book.wasm
+│    │    │    └── hello-near.wasm
+│    │    └── main.ava.ts
+│    ├── ava.config.cjs
+│    └── package.json
+├── package.json
+├── src # contract's code
+│    ├── internal
+│    │    ├── batch_actions.ts
+│    │    ├── constants.ts
+│    │    ├── multiple_contracts.ts
+│    │    ├── similar_contracts.ts
+│    │    └── utils.ts
+│    └── contract.ts
+├── package.json
+├── README.md
+└── tsconfig.json
+```
+
+## Smart Contract
+
+### 1. Batch Actions
+
+You can aggregate multiple actions directed towards one same contract into a batched transaction.
+Methods called this way are executed sequentially, with the added benefit that, if one fails then
+they **all get reverted**.
 
 ```ts
-@call
-query_greeting() {
-  const call = near.promiseBatchCreate(this.hello_account);
-  near.promiseBatchActionFunctionCall(call, "get_greeting", bytes(JSON.stringify({})), 0, 5 * TGAS);
-  const then = near.promiseThen(call, near.currentAccountId(), "query_greeting_callback", bytes(JSON.stringify({})), 0, 5 * TGAS);
-  return near.promiseReturn(then);
-}
-
-@call
-query_greeting_callback() {
-  assert(near.currentAccountId() === near.predecessorAccountId(), "This is a private method");
-  const greeting = near.promiseResult(0) as String;
-  return greeting.substring(1, greeting.length-1);
-}
-
-@call
-change_greeting({ new_greeting }: { new_greeting: string }) {
-  const call = near.promiseBatchCreate(this.hello_account);
-  near.promiseBatchActionFunctionCall(call, "set_greeting", bytes(JSON.stringify({ greeting: new_greeting })), 0, 5 * TGAS);
-  const then = near.promiseThen(call, near.currentAccountId(), "change_greeting_callback", bytes(JSON.stringify({})), 0, 5 * TGAS);
-  return near.promiseReturn(then);
-}
-
-@call
-change_greeting_callback() {
-  assert(near.currentAccountId() === near.predecessorAccountId(), "This is a private method");
-
-  if (near.promiseResultsCount() == BigInt(1)) {
-    near.log("Promise was successful!")
-    return true
-  } else {
-    near.log("Promise failed...")
-    return false
-  }
-}
+// Promise with batch actions
+  const promise = NearPromise.new(accountId)
+    .functionCall(...)
+    .functionCall(...)
+    .functionCall(...)
+    .functionCall(...)
+    .then(
+      NearPromise.new(near.currentAccountId())
+      .functionCall(...)
+    )
 ```
+
+In this case, the callback has access to the value returned by the **last
+action** from the chain.
 
 <br />
 
-# Quickstart
+### 2. Calling Multiple Contracts
 
-1. Make sure you have installed [node.js](https://nodejs.org/en/download/package-manager/) >= 16.
+A contract can call multiple other contracts. This creates multiple transactions that execute
+all in parallel. If one of them fails the rest **ARE NOT REVERTED**.
+
+```ts
+  const promise1 = NearPromise.new(contract.hello_account)
+    .functionCall(...)
+  const promise2 = NearPromise.new(contract.counter_account)
+    .functionCall(...)
+  const promise3 = NearPromise.new(contract.guestbook_account)
+    .functionCall(...)
+
+  return promise1
+    .and(promise2)
+    .and(promise3)
+    .then(
+      NearPromise.new(near.currentAccountId())
+      .functionCall(...)
+    )
+```
+
+In this case, the callback has access to an **array of responses**, which have either the
+value returned by each call, or an error message.
+
+<br />
+
+### 3. Calling Contracts With the Same Return Type
+
+This example is a particular case of the previous one ([2. Calling Multiple Contracts](#2-calling-multiple-contracts)).
+It simply showcases a different way to check the results by directly accessing the `promise_result` array.
+
+```ts
+  for (let i = 0; i < number_promises; i++) {
+      near.log(`Get index result: ${i}`);
+      let { success, result } = promiseResult(i);
+  
+      if (success) {
+        allResults.push(result);
+        near.log(`Success! Index: ${i}, Result: ${result}`);
+      } else {
+        near.log("Promise failed...");
+        return [];
+      }
+    }
+  return allResults;
+```
+---
+## Quickstart
+
+
+
+1. Make sure you have installed [Node.s](https://nodejs.org/en/download)
 2. Install the [`NEAR CLI`](https://github.com/near/near-cli#setup)
 
-<br />
 
-## 1. Build and Deploy the Contract
-You can automatically compile and deploy the contract in the NEAR testnet by running:
+## Build and Test the Contract
+The contract readily includes a set of unit and sandbox testing to validate its functionality. To execute the tests, run the following commands:
 
-```bash
-npm run deploy
-```
 
-Once finished, check the `neardev/dev-account` file to find the address in which the contract was deployed:
 
 ```bash
-cat ./neardev/dev-account  # dev-1659899566943-21539992274727
+# To solely build the contract
+yarn build
+
+# To build and execute the contract's tests
+yarn test
 ```
-
-<br />
-
-## 2. Get the Greeting
-
-`query_greeting` performs a cross-contract call, calling the `get_greeting()` method from `hello-nearverse.testnet`.
-
-`Call` methods can only be invoked using a NEAR account, since the account needs to pay GAS for the transaction.
-
-```bash
-# Use near-cli to ask the contract to query the greeting
-near call <dev-account> query_greeting --accountId <dev-account>
-```
-
-<br />
-
-## 3. Set a New Greeting
-`change_greeting` performs a cross-contract call, calling the `set_greeting({greeting:String})` method from `hello-nearverse.testnet`.
-
-`Call` methods can only be invoked using a NEAR account, since the account needs to pay GAS for the transaction.
-
-```bash
-# Use near-cli to change the greeting
-near call <dev-account> change_greeting '{"new_greeting":"XCC Hi"}' --accountId <dev-account>
-```
-
-**Tip:** If you would like to call `change_greeting` or `query_greeting` using your own account, first login into NEAR using:
-
-```bash
-# Use near-cli to login your NEAR account
-near login
-```
-
-and then use the logged account to sign the transaction: `--accountId <your-account>`.
