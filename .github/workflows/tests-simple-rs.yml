@@ -1,0 +1,17 @@
+name: Tests Contract Simple RS
+on: push
+jobs:
+  workflows:
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "18"
+      - name: Install and test modules
+        run: |
+          cd ./contract-simple-rs
+          ./test.sh
