@@ -114,7 +114,7 @@ near create-account <accountId> --useFaucet
 # Deploy the contract
 ./build.sh
 
-near deploy <accountId> contract.wasm init '{"hello_account":"hello.near-example.testnet"}' 
+near deploy <accountId> ./target/wasm32-unknown-unknown/release/cross_contract.wasm init '{"hello_account":"hello.near-example.testnet"}' 
 ```
 ### CLI: Interacting with the Contract
 

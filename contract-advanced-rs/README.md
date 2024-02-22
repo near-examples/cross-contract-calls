@@ -20,7 +20,6 @@ This contract presents 3 examples on how to do complex cross-contract calls. Par
 │    │    └── main.ava.ts
 │    ├── ava.config.cjs
 │    └── package.json
-├── package.json
 ├── src # contract's code
 │    ├── batch_actions.rs
 │    ├── lib.rs

@@ -12,7 +12,6 @@ The smart contract implements the simplest form of cross-contract calls: it call
 │    │    └── main.ava.ts
 │    ├── ava.config.cjs
 │    └── package.json
-├── package.json
 ├── src # contract's code
 │    └── contract.ts
 ├── package.json
@@ -93,7 +92,7 @@ near create-account <accountId> --useFaucet
 
 # Deploy the contract
 yarn build
-near deploy <accountId> contract.wasm init '{"hello_account":"hello.near-example.testnet"}' 
+near deploy <accountId> ./build/cross_contract.wasm init '{"hello_account":"hello.near-example.testnet"}' 
 ```
 ### CLI: Interacting with the Contract
 
