@@ -1,4 +1,4 @@
-use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
+use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
 use near_sdk::{env, log, near_bindgen, AccountId, Gas, Promise, PromiseError, PanicOnDefault};
 
 pub mod external;
@@ -6,6 +6,7 @@ pub use crate::external::*;
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
+#[borsh(crate = "near_sdk::borsh")]
 pub struct Contract {
   pub hello_account: AccountId
 }
@@ -25,12 +26,12 @@ impl Contract {
   pub fn query_greeting(&self) -> Promise {
     // Create a promise to call HelloNEAR.get_greeting()
     let promise = hello_near::ext(self.hello_account.clone())
-      .with_static_gas(Gas(5*TGAS))
+      .with_static_gas(Gas::from_tgas(5))
       .get_greeting();
     
     return promise.then( // Create a promise to callback query_greeting_callback
       Self::ext(env::current_account_id())
-      .with_static_gas(Gas(5*TGAS))
+      .with_static_gas(Gas::from_tgas(5))
       .query_greeting_callback()
     )
   }
@@ -52,11 +53,11 @@ impl Contract {
   pub fn change_greeting(&mut self, new_greeting: String) -> Promise {
     // Create a promise to call HelloNEAR.set_greeting(message:string)
     hello_near::ext(self.hello_account.clone())
-      .with_static_gas(Gas(5*TGAS))
+      .with_static_gas(Gas::from_tgas(5))
       .set_greeting(new_greeting)
     .then( // Create a callback change_greeting_callback
       Self::ext(env::current_account_id())
-      .with_static_gas(Gas(5*TGAS))
+      .with_static_gas(Gas::from_tgas(5))
       .change_greeting_callback()
     )
   }
@@ -85,6 +86,6 @@ mod tests {
     fn initializes() {
         let beneficiary: AccountId = HELLO_NEAR.parse().unwrap();
         let contract = Contract::init(beneficiary);
-        assert_eq!(contract.hello_account, HELLO_NEAR.parse().unwrap())
+        assert_eq!(contract.hello_account, HELLO_NEAR)
     }
 }
