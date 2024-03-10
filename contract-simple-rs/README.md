@@ -81,11 +81,10 @@ pub fn change_greeting_callback(&mut self, #[callback_result] call_result: Resul
 
 1. Make sure you have installed [Rust](https://www.rust-lang.org/tools/install)
 2. Install the [`NEAR CLI`](https://github.com/near/near-cli#setup)
+3. Install the [`cargo-near`](https://github.com/near/cargo-near)
 
 ## Build and Test the Contract
-The contract readily includes a set of unit and sandbox testing to validate its functionality. To build and execute the tests, run the following commands.
-
-Install [`cargo-near`](https://github.com/near/cargo-near) and run:
+The contract readily includes a set of unit and sandbox testing to validate its functionality. To build and execute the tests, run the following commands:
 
 ```bash
 # To solely build the contract
