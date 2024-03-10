@@ -5,21 +5,16 @@ The smart contract implements the simplest form of cross-contract calls: it call
 ## Structure of the Example
 
 ```bash
-┌── sandbox-ts # sandbox testing
-│    ├── src
-│    │    ├── hello-near
-│    │    │    └── hello-near.wasm
-│    │    └── main.ava.ts
-│    ├── ava.config.cjs
-│    └── package.json
+┌── tests # sandbox testing
+│    ├── hello-near
+│    │    └── hello-near.wasm
+│    └── tests.rs
 ├── src # contract's code
 │    ├── external.rs
 │    └── lib.rs
-├── build.sh # build script
 ├── Cargo.toml # package manager
 ├── README.md
-├── rust-toolchain.toml
-└── test.sh # test script
+└── rust-toolchain.toml
 ```
 
 ## Smart Contract
@@ -84,23 +79,20 @@ pub fn change_greeting_callback(&mut self, #[callback_result] call_result: Resul
 
 ## Quickstart
 
-
-
 1. Make sure you have installed [Rust](https://www.rust-lang.org/tools/install)
 2. Install the [`NEAR CLI`](https://github.com/near/near-cli#setup)
 
-
 ## Build and Test the Contract
-The contract readily includes a set of unit and sandbox testing to validate its functionality. To execute the tests, run the following commands:
+The contract readily includes a set of unit and sandbox testing to validate its functionality. To build and execute the tests, run the following commands.
 
-
+Install [`cargo-near`](https://github.com/near/cargo-near) and run:
 
 ```bash
 # To solely build the contract
-./build.sh
+cargo near build
 
-# To build and execute the contract's tests
-./test.sh
+# To execute the contract's tests
+cargo test
 ```
 
 ## Deploying the Contract to the NEAR network
@@ -112,10 +104,11 @@ In order to deploy the contract you will need to [create a NEAR account](https:/
 near create-account <accountId> --useFaucet
 
 # Deploy the contract
-./build.sh
-
-near deploy <accountId> ./target/wasm32-unknown-unknown/release/cross_contract.wasm init '{"hello_account":"hello.near-example.testnet"}' 
+cargo near deploy <accountId>
 ```
+
+During deployment choose the `with-init-call` option, type `init` name of function and pass as `json-args` this object: `{"hello_account":"hello.near-example.testnet"}`.
+
 ### CLI: Interacting with the Contract
 
 To interact with the contract through the console, you can use the following commands

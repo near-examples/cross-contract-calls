@@ -4,8 +4,8 @@ This repository contains examples on how to perform cross-contract calls in Rust
 
 ## Repositories
 
-- [contract-hello-rs](contract-hello-rs) - Rust example
-- [contract-hello-ts](contract-hello-ts) - JavaScript example
+- [contract-simple-rs](contract-simple-rs) - Rust example
+- [contract-simple-ts](contract-simple-ts) - JavaScript example
 - [contract-advanced-rs](contract-advanced-rs) - Rust advanced example
 - [contract-advanced-ts](ccontract-advanced-ts) - JavaScript advanced example
 

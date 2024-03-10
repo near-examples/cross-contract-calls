@@ -11,25 +11,20 @@ This contract presents 3 examples on how to do complex cross-contract calls. Par
 ## Structure of the Contract
 
 ```bash
-┌── sandbox-ts # sandbox testing
-│    ├── src
-│    │    ├── external-contracts
-│    │    │    ├── counter.wasm
-│    │    │    ├── guest-book.wasm
-│    │    │    └── hello-near.wasm
-│    │    └── main.ava.ts
-│    ├── ava.config.cjs
-│    └── package.json
+┌── tests # sandbox testing
+│    ├── external-contracts
+│    │    ├── counter.wasm
+│    │    ├── guest-book.wasm
+│    │    └── hello-near.wasm
+│    └── tests.rs
 ├── src # contract's code
 │    ├── batch_actions.rs
 │    ├── lib.rs
 │    ├── multiple_contracts.rs
 │    └── similar_contracts.rs
-├── build.sh # build script
 ├── Cargo.toml # package manager
 ├── README.md
-├── rust-toolchain.toml
-└── test.sh # test script
+└── rust-toolchain.toml
 ```
 
 ## Smart Contract
@@ -104,21 +99,18 @@ for index in 0..3 {
 ---
 ## Quickstart
 
-
-
 1. Make sure you have installed [Rust](https://www.rust-lang.org/tools/install)
 2. Install the [`NEAR CLI`](https://github.com/near/near-cli#setup)
 
-
 ## Build and Test the Contract
-The contract readily includes a set of unit and sandbox testing to validate its functionality. To execute the tests, run the following commands:
+The contract readily includes a set of unit and sandbox testing to validate its functionality. To build and execute the tests, run the following commands.
 
-
+Install [`cargo-near`](https://github.com/near/cargo-near) and run:
 
 ```bash
 # To solely build the contract
-./build.sh
+cargo near build
 
 # To build and execute the contract's tests
-./test.sh
+cargo test
 ```
