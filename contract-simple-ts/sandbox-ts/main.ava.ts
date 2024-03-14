@@ -2,19 +2,15 @@ import { Worker, NearAccount } from 'near-workspaces';
 import anyTest, { TestFn } from 'ava';
 import { setDefaultResultOrder } from 'dns'; setDefaultResultOrder('ipv4first'); // temp fix for node >v17
 
-// Global context
-let worker: Worker;
-let accounts: Record<string, NearAccount>;
+// Global worker
+const test = anyTest as TestFn<{ worker: Worker, accounts: Record<string, NearAccount> }>;
 
-const test = anyTest as TestFn<{}>;
-
-test.before(async (t) => {
-  // Init the worker and start a Sandbox server
-  worker = await Worker.init();
-
-  // Prepare sandbox for tests, create accounts, deploy contracts, etx.
-  const root = worker.rootAccount;
+test.beforeEach(async (t) => {
+  // Create sandbox, accounts, deploy contracts, etc.
+  const worker = t.context.worker = await Worker.init()
   
+  const root = worker.rootAccount;
+
   // Create test accounts
   const alice = await root.createSubAccount("alice");
   const xcc = await root.createSubAccount("xcc");
@@ -25,21 +21,21 @@ test.before(async (t) => {
 
   // Deploy the xcc contract
   await xcc.deploy(process.argv[2]);
-  await xcc.call(xcc, "init", {hello_account: helloNear.accountId})
+  await xcc.call(xcc, "init", { hello_account: helloNear.accountId })
 
   // Save state for test runs, it is unique for each test
-  accounts = { root, alice, xcc, helloNear };
+  t.context.accounts = { root, alice, xcc, helloNear };
 });
 
-test.after.always(async (t) => {
+test.afterEach.always(async (t) => {
   // Stop Sandbox server
-  await worker.tearDown().catch((error) => {
+  await t.context.worker.tearDown().catch((error) => {
     console.log('Failed to stop the Sandbox:', error);
   });
 });
 
 test("returns the default greeting", async (t) => {
-  const { xcc, alice } = accounts;
+  const { xcc, alice } = t.context.accounts;
 
   const greeting = await alice.call(xcc, "query_greeting", {}, { gas: "200000000000000" });
   console.log('greeting: ', greeting);
@@ -47,14 +43,14 @@ test("returns the default greeting", async (t) => {
 });
 
 test("change the greeting", async (t) => {
-  const { xcc, alice } = accounts;
+  const { xcc, alice } = t.context.accounts;
 
   const howdyChangingResult = await alice.call(xcc, "change_greeting", { new_greeting: "Howdy" }, { gas: "200000000000000" });
   t.is(howdyChangingResult, true);
 
   const howdyResult = await alice.call(xcc, "query_greeting", {}, { gas: "200000000000000" });
   t.is(howdyResult, 'Howdy');
-  
+
   // const helloChangingResult = await alice.call(xcc, "change_greeting", { new_greeting: "Hello" }, { gas: "200000000000000" });
   // t.is(helloChangingResult, true);
 
