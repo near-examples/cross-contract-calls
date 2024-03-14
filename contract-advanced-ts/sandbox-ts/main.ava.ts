@@ -3,16 +3,14 @@ import anyTest, { TestFn } from 'ava';
 import { setDefaultResultOrder } from 'dns'; setDefaultResultOrder('ipv4first'); // temp fix for node >v17
 
 // Global context
-let worker: Worker;
-let accounts: Record<string, NearAccount>;
-
-const test = anyTest as TestFn<{}>;
+const test = anyTest as TestFn<{ worker: Worker, accounts: Record<string, NearAccount> }>;
 
 type PremiumMessage = { premium: boolean; sender: string; text: string };
 
-test.before(async (t) => {
-  // Init the worker and start a Sandbox server
-  worker = await Worker.init();
+test.beforeEach(async (t) => {
+  console.log(111);
+  // Create sandbox, accounts, deploy contracts, etc.
+  const worker = t.context.worker = await Worker.init();
 
   // Get root account
   const root = worker.rootAccount;
@@ -29,10 +27,8 @@ test.before(async (t) => {
   await guestBook.deploy("./sandbox-ts/external-contracts/guest-book.wasm");
   await counter.deploy("./sandbox-ts/external-contracts/counter.wasm");
 
-  // Deploy xcc contract
+  // Deploy the xcc contract
   await xcc.deploy(process.argv[2]);
-
-  // Initialize xcc contract
   await xcc.call(xcc, "init", {
     hello_account: helloNear.accountId,
     counter_account: counter.accountId,
@@ -40,7 +36,7 @@ test.before(async (t) => {
   });
 
   // Save state for test runs, it is unique for each test
-  accounts = {
+  t.context.accounts = {
     xcc,
     alice,
     helloNear,
@@ -49,16 +45,16 @@ test.before(async (t) => {
   };
 });
 
-test.after.always(async (t) => {
+test.afterEach.always(async (t) => {
   // Stop Sandbox server
-  await worker.tearDown().catch((error) => {
+  await t.context.worker.tearDown().catch((error) => {
     console.log("Failed tear down the worker:", error);
   });
 });
 
 test("multiple_contract", async (t) => {
   console.log('Starting multiple_contract tests');
-  const { xcc, alice, helloNear, counter, guestBook } = accounts;
+  const { xcc, alice, helloNear, counter, guestBook } = t.context.accounts;
 
   await alice.call(counter, "decrement", {});
   await alice.call(helloNear, "set_greeting", { greeting: "Howdy" });
@@ -90,7 +86,7 @@ test("multiple_contract", async (t) => {
 
 test("similar_contracts", async (t) => {
   console.log('Starting similar_contracts tests');
-  const { xcc, alice } = accounts;
+  const { xcc, alice } = t.context.accounts;
 
   const results: [[string]] = await alice.call(
     xcc,
@@ -106,7 +102,7 @@ test("similar_contracts", async (t) => {
 
 test("batch_actions", async (t) => {
   console.log('Starting batch_actions tests');
-  const { xcc, alice } = accounts;
+  const { xcc, alice } = t.context.accounts;
 
   const result: string = await alice.call(
     xcc,
