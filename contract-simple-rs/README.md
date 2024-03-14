@@ -2,123 +2,54 @@
 
 The smart contract implements the simplest form of cross-contract calls: it calls the [Hello NEAR example](https://docs.near.org/tutorials/examples/hello-near) to get and set a greeting.
 
-## Structure of the Example
+## How to Build Locally?
+
+Install [`cargo-near`](https://github.com/near/cargo-near) and run:
 
 ```bash
-┌── tests # sandbox testing
-│    ├── hello-near
-│    │    └── hello-near.wasm
-│    └── tests.rs
-├── src # contract's code
-│    ├── external.rs
-│    └── lib.rs
-├── Cargo.toml # package manager
-├── README.md
-└── rust-toolchain.toml
-```
-
-## Smart Contract
-
-```rust
-// Public - query external greeting
-pub fn query_greeting(&self) -> Promise {
-  // Create a promise to call HelloNEAR.get_greeting()
-  let promise = hello_near::ext(self.hello_account.clone())
-    .with_static_gas(Gas(5*TGAS))
-    .get_greeting();
-
-  return promise.then( // Create a promise to callback query_greeting_callback
-    Self::ext(env::current_account_id())
-    .with_static_gas(Gas(5*TGAS))
-    .query_greeting_callback()
-  )
-}
-
-#[private] // Public - but only callable by env::current_account_id()
-pub fn query_greeting_callback(&self, #[callback_result] call_result: Result<String, PromiseError>) -> String {
-  // Check if the promise succeeded by calling the method outlined in external.rs
-  if call_result.is_err() {
-    log!("There was an error contacting Hello NEAR");
-    return "".to_string();
-  }
-
-  // Return the greeting
-  let greeting: String = call_result.unwrap();
-  greeting
-}
-
-// Public - change external greeting
-pub fn change_greeting(&mut self, new_greeting: String) -> Promise {
-  // Create a promise to call HelloNEAR.set_greeting(message:string)
-  hello_near::ext(self.hello_account.clone())
-    .with_static_gas(Gas(5*TGAS))
-    .set_greeting(new_greeting)
-  .then( // Create a callback change_greeting_callback
-    Self::ext(env::current_account_id())
-    .with_static_gas(Gas(5*TGAS))
-    .change_greeting_callback()
-  )
-}
-
-#[private]
-pub fn change_greeting_callback(&mut self, #[callback_result] call_result: Result<(), PromiseError>) -> bool {
-  // Return whether or not the promise succeeded using the method outlined in external.rs
-  if call_result.is_err() {
-    env::log_str("set_greeting was successful!");
-    return true;
-  } else {
-    env::log_str("set_greeting failed...");
-    return false;
-  }
-}
-```
-
-<br />
-
----
-
-## Quickstart
-
-1. Make sure you have installed [Rust](https://www.rust-lang.org/tools/install)
-2. Install the [`NEAR CLI`](https://github.com/near/near-cli#setup)
-3. Install the [`cargo-near`](https://github.com/near/cargo-near)
-
-## Build and Test the Contract
-The contract readily includes a set of unit and sandbox testing to validate its functionality. To build and execute the tests, run the following commands:
-
-```bash
-# To solely build the contract
 cargo near build
+```
 
-# To execute the contract's tests
+## How to Test Locally?
+
+```bash
 cargo test
 ```
 
-## Deploying the Contract to the NEAR network
+## How to Deploy?
 
-In order to deploy the contract you will need to [create a NEAR account](https://docs.near.org/develop/contracts/quickstart#create-a-testnet-account).
+To deploy manually, install [`cargo-near`](https://github.com/near/cargo-near) and run:
 
 ```bash
-# Optional - create an account
-near create-account <accountId> --useFaucet
+# Create a new account
+cargo near create-dev-account
 
-# Deploy the contract
-cargo near deploy <accountId>
+# Deploy the contract on it
+cargo near deploy <account-id>
 ```
 
-During deployment choose the `with-init-call` option, type `init` name of function and pass as `json-args` this object: `{"hello_account":"hello.near-example.testnet"}`.
-
-### CLI: Interacting with the Contract
+## CLI: Interacting with the Contract
 
 To interact with the contract through the console, you can use the following commands
 
 ```bash
 
 # Get message from the hello-near contract
-# Replace <accountId> with your account ID
-near call <accountId> query_greeting --accountId <accountId>
+# Replace <account-id> with your account ID
+near call <account-id> query_greeting --accountId <account-id>
 
 # Set a new message for the hello-near contract
-# Replace <accountId> with your account ID
-near call <accountId> change_greeting '{"new_greeting":"XCC Hi"}' --accountId <accountId>
+# Replace <account-id> with your account ID
+near call <account-id> change_greeting '{"new_greeting":"XCC Hi"}' --accountId <account-id>
 ```
+
+# Useful Links
+
+- [cargo-near](https://github.com/near/cargo-near) - NEAR smart contract development toolkit for Rust
+- [near CLI](https://near.cli.rs) - Interact with NEAR blockchain from command line
+- [NEAR Rust SDK Documentation](https://docs.near.org/sdk/rust/introduction)
+- [NEAR Documentation](https://docs.near.org)
+- [NEAR StackOverflow](https://stackoverflow.com/questions/tagged/nearprotocol)
+- [NEAR Discord](https://near.chat)
+- [NEAR Telegram Developers Community Group](https://t.me/neardev)
+- NEAR DevHub: [Telegram](https://t.me/neardevhub), [Twitter](https://twitter.com/neardevhub)

@@ -5,15 +5,19 @@
   "type": "module",
   "scripts": {
     "build": "near-sdk-js build src/contract.ts build/cross_contract.wasm",
-    "test": "$npm_execpath run build && cd sandbox-ts && $npm_execpath run test -- -- ../build/cross_contract.wasm",
-    "postinstall": "cd sandbox-ts && $npm_execpath install"
+    "test": "$npm_execpath build && ava -- ./build/cross_contract.wasm"
   },
   "dependencies": {
-    "near-cli": "^3.5.0",
+    "near-cli": "^4.0.10",
     "near-sdk-js": "1.0.0"
   },
   "devDependencies": {
-    "typescript": "^4.8.4",
-    "ts-morph": "^16.0.0"
+    "@ava/typescript": "^4.1.0",
+    "ava": "^6.1.2",
+    "near-workspaces": "^3.5.0",
+    "ts-morph": "^22.0.0",
+    "ts-node": "^10.9.2",
+    "tsimp": "^2.0.11",
+    "typescript": "^5.4.2"
   }
 }
