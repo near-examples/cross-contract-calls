@@ -8,7 +8,6 @@ const test = anyTest as TestFn<{ worker: Worker, accounts: Record<string, NearAc
 type PremiumMessage = { premium: boolean; sender: string; text: string };
 
 test.beforeEach(async (t) => {
-  console.log(111);
   // Create sandbox, accounts, deploy contracts, etc.
   const worker = t.context.worker = await Worker.init();
 
@@ -53,7 +52,6 @@ test.afterEach.always(async (t) => {
 });
 
 test("multiple_contract", async (t) => {
-  console.log('Starting multiple_contract tests');
   const { xcc, alice, helloNear, counter, guestBook } = t.context.accounts;
 
   await alice.call(counter, "decrement", {});
@@ -85,7 +83,6 @@ test("multiple_contract", async (t) => {
 });
 
 test("similar_contracts", async (t) => {
-  console.log('Starting similar_contracts tests');
   const { xcc, alice } = t.context.accounts;
 
   const results: [[string]] = await alice.call(
@@ -101,7 +98,6 @@ test("similar_contracts", async (t) => {
 });
 
 test("batch_actions", async (t) => {
-  console.log('Starting batch_actions tests');
   const { xcc, alice } = t.context.accounts;
 
   const result: string = await alice.call(
