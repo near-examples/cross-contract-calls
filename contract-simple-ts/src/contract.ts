@@ -1,4 +1,4 @@
-import { NearBindgen, initialize, call, near, bytes, NearPromise } from "near-sdk-js";
+import { NearBindgen, initialize, call, near, NearPromise, PromiseIndex } from "near-sdk-js";
 import { AccountId } from "near-sdk-js/lib/types";
 
 const FIVE_TGAS = BigInt("50000000000000");
@@ -67,7 +67,7 @@ class CrossContractCall {
 function promiseResult(): {result: string, success: boolean}{
   let result, success;
   
-  try{ result = near.promiseResult(0); success = true }
+  try{ result = near.promiseResult(0 as PromiseIndex); success = true }
   catch{ result = undefined; success = false }
   
   return {result, success}

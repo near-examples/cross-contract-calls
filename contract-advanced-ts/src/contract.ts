@@ -11,7 +11,7 @@ import {
 import {
   similar_contracts as internal_similar_contracts,
   similar_contracts_callback as internal_similar_contracts_callback,
-} from "./internal/similar_contratcs";
+} from "./internal/similar_contracts";
 
 @NearBindgen({})
 export class CrossContractCall {

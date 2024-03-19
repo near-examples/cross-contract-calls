@@ -1,12 +1,12 @@
-use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
-use near_sdk::{near_bindgen, AccountId, Balance, Gas};
+use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
+use near_sdk::{near_bindgen, AccountId, NearToken, Gas};
 
 mod batch_actions;
 mod multiple_contracts;
 mod similar_contracts;
 
-const XCC_GAS: Gas = Gas(10u64.pow(13));
-const NO_DEPOSIT: Balance = 0;
+const XCC_GAS: Gas = Gas::from_tgas(10);
+const NO_DEPOSIT: NearToken = NearToken::from_near(0);
 const NO_ARGS: Vec<u8> = vec![];
 const HELLO_CONTRACT: &str = "hello.near-examples.testnet";
 const COUNTER_CONTRACT: &str = "counter.near-examples.testnet";
@@ -15,6 +15,7 @@ const GUESTBOOK_CONTRACT: &str = "guestbook.near-examples.testnet";
 // Define the contract structure
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
+#[borsh(crate = "near_sdk::borsh")]
 pub struct Contract {
     pub hello_account: AccountId,
     pub counter_account: AccountId,

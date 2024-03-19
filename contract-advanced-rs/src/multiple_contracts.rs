@@ -1,14 +1,14 @@
+use schemars::JsonSchema;
 use near_sdk::serde::{Deserialize, Serialize};
-use near_sdk::serde_json::json;
-use near_sdk::{env, log, near_bindgen, AccountId, Promise, PromiseError};
+use near_sdk::{env, log, near_bindgen, serde_json::json, Promise, PromiseError};
 
-use crate::{Contract, ContractExt, NO_ARGS, XCC_GAS};
+use crate::{Contract, ContractExt, NO_ARGS, NO_DEPOSIT, XCC_GAS};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, JsonSchema)]
 #[serde(crate = "near_sdk::serde")]
 pub struct PostedMessage {
     pub premium: bool,
-    pub sender: AccountId,
+    pub sender: String,
     pub text: String,
 }
 
@@ -20,7 +20,7 @@ impl Contract {
         let hello_promise = Promise::new(self.hello_account.clone()).function_call(
             "get_greeting".to_owned(),
             NO_ARGS,
-            0,
+            NO_DEPOSIT,
             XCC_GAS,
         );
 
@@ -28,7 +28,7 @@ impl Contract {
         let counter_promise = Promise::new(self.counter_account.clone()).function_call(
             "get_num".to_owned(),
             NO_ARGS,
-            0,
+            NO_DEPOSIT,
             XCC_GAS,
         );
 
@@ -40,7 +40,7 @@ impl Contract {
         let guestbook_promise = Promise::new(self.guestbook_account.clone()).function_call(
             "get_messages".to_owned(),
             args,
-            0,
+            NO_DEPOSIT,
             XCC_GAS,
         );
 

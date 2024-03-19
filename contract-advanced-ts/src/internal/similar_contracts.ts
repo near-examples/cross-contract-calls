@@ -35,21 +35,21 @@ export function similar_contracts(contract: CrossContractCall) {
 }
 
 export function similar_contracts_callback(number_promises: number): string[] {
-    const allResults = [];
-      
-    for (let i = 0; i < number_promises; i++) {
-      near.log(`Get index result: ${i}`);
-      let { success, result } = promiseResult(i);
-  
-      if (success) {
-        allResults.push(result);
-        near.log(`Success! Index: ${i}, Result: ${result}`);
-      } else {
-        near.log("Promise failed...");
-        return [];
-      }
+  const allResults = [];
+    
+  for (let i = 0; i < number_promises; i++) {
+    near.log(`Get index result: ${i}`);
+    let { success, result } = promiseResult(i);
+
+    if (success) {
+      allResults.push(result);
+      near.log(`Success! Index: ${i}, Result: ${result}`);
+    } else {
+      near.log("Promise failed...");
+      return [];
     }
-  
-    return allResults;
-  };
+  }
+
+  return allResults;
+};
   

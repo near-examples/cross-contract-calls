@@ -1,13 +1,14 @@
-**/sandbox-ts/node_modules
-**/sandbox-ts/package-lock.json
+# Rust
 **/target
 **/Cargo.lock
 
-**/build
-**/node_modules
-**/sandbox-ts/node_modules
-**/sandbox-ts/package-lock.json
-**/sandbox-ts/yarn.lock
+# TypeScript
+**/package-lock.json
+**/node_modules/
+**/build/
+**/yarn.lock
+**/.tsimp
 
-
-
+# Frontend
+**/dist/
+**/.parcel-cache

@@ -1,7 +1,6 @@
-use near_sdk::serde_json::json;
-use near_sdk::{env, log, near_bindgen, Promise, PromiseResult};
+use near_sdk::{env, log, near_bindgen, serde_json::json, Promise, PromiseResult};
 
-use crate::{Contract, ContractExt, NO_ARGS, XCC_GAS};
+use crate::{Contract, ContractExt, NO_ARGS, NO_DEPOSIT, XCC_GAS};
 
 #[near_bindgen]
 impl Contract {
@@ -11,8 +10,8 @@ impl Contract {
         let args = json!({ "greeting": message }).to_string().into_bytes();
 
         Promise::new(self.hello_account.clone())
-            .function_call("set_greeting".to_owned(), args, 0, XCC_GAS)
-            .function_call("get_greeting".to_owned(), NO_ARGS, 0, XCC_GAS)
+            .function_call("set_greeting".to_owned(), args, NO_DEPOSIT, XCC_GAS)
+            .function_call("get_greeting".to_owned(), NO_ARGS, NO_DEPOSIT, XCC_GAS)
     }
 
     pub fn similar_contracts(&mut self) -> Promise {
@@ -40,10 +39,6 @@ impl Contract {
                 match result {
                     PromiseResult::Failed => {
                         log!(format!("Promise number {index} failed."));
-                        None
-                    }
-                    PromiseResult::NotReady => {
-                        log!(format!("Promise number {index} is not ready yet."));
                         None
                     }
                     PromiseResult::Successful(value) => {
