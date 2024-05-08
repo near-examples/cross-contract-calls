@@ -1,4 +1,5 @@
-import { NearBindgen, initialize, call, near, NearPromise } from "near-sdk-js";
+// Find all our documentation at https://docs.near.org
+import { call, initialize, near, NearBindgen, NearPromise } from "near-sdk-js";
 import { AccountId } from "near-sdk-js/lib/types";
 import {
   batch_actions as internal_batch_actions,
@@ -50,7 +51,9 @@ export class CrossContractCall {
   }
 
   @call({ privateFunction: true })
-  multiple_contracts_callback({ number_promises }: { number_promises: number;}): string[] {
+  multiple_contracts_callback(
+    { number_promises }: { number_promises: number },
+  ): string[] {
     return internal_multiple_contracts_callback(number_promises);
   }
 
@@ -60,7 +63,9 @@ export class CrossContractCall {
   }
 
   @call({ privateFunction: true })
-  similar_contracts_callback({ number_promises }: { number_promises: number;}): string[] {
+  similar_contracts_callback(
+    { number_promises }: { number_promises: number },
+  ): string[] {
     return internal_similar_contracts_callback(number_promises);
   }
 }
