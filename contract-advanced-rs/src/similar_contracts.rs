@@ -1,8 +1,9 @@
-use near_sdk::{env, log, near_bindgen, serde_json::json, Promise, PromiseResult};
+// Find all our documentation at https://docs.near.org
+use near_sdk::{env, log, near, serde_json::json, Promise, PromiseResult};
 
 use crate::{Contract, ContractExt, NO_ARGS, NO_DEPOSIT, XCC_GAS};
 
-#[near_bindgen]
+#[near]
 impl Contract {
     fn promise_set_get(&self, message: &str) -> Promise {
         // Aux method to create a batch transaction calling

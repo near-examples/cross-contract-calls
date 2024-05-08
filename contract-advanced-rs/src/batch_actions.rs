@@ -1,8 +1,9 @@
-use near_sdk::{env, log, near_bindgen, serde_json::json, Promise, PromiseError};
+// Find all our documentation at https://docs.near.org
+use near_sdk::{env, log, near, serde_json::json, Promise, PromiseError};
 
 use crate::{Contract, ContractExt, NO_ARGS, NO_DEPOSIT, XCC_GAS};
 
-#[near_bindgen]
+#[near]
 impl Contract {
     pub fn batch_actions(&mut self) -> Promise {
         let hi = json!({ "greeting": "hi" }).to_string().into_bytes();

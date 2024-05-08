@@ -1,5 +1,5 @@
-use near_sdk::borsh::{BorshDeserialize, BorshSerialize};
-use near_sdk::{near_bindgen, AccountId, NearToken, Gas};
+// Find all our documentation at https://docs.near.org
+use near_sdk::{near, AccountId, Gas, NearToken};
 
 mod batch_actions;
 mod multiple_contracts;
@@ -13,9 +13,7 @@ const COUNTER_CONTRACT: &str = "counter.near-examples.testnet";
 const GUESTBOOK_CONTRACT: &str = "guestbook.near-examples.testnet";
 
 // Define the contract structure
-#[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize)]
-#[borsh(crate = "near_sdk::borsh")]
+#[near(contract_state)]
 pub struct Contract {
     pub hello_account: AccountId,
     pub counter_account: AccountId,
@@ -32,7 +30,7 @@ impl Default for Contract {
     }
 }
 
-#[near_bindgen]
+#[near]
 impl Contract {
     #[init]
     #[private]
