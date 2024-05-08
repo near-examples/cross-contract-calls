@@ -1,18 +1,17 @@
-use schemars::JsonSchema;
-use near_sdk::serde::{Deserialize, Serialize};
-use near_sdk::{env, log, near_bindgen, serde_json::json, Promise, PromiseError};
+// Find all our documentation at https://docs.near.org
+use near_sdk::{env, log, near, serde_json::json, Promise, PromiseError};
 
 use crate::{Contract, ContractExt, NO_ARGS, NO_DEPOSIT, XCC_GAS};
 
-#[derive(Deserialize, Serialize, Debug, JsonSchema)]
-#[serde(crate = "near_sdk::serde")]
+#[near(serializers=[borsh, json])]
+#[derive(Debug)]
 pub struct PostedMessage {
     pub premium: bool,
     pub sender: String,
     pub text: String,
 }
 
-#[near_bindgen]
+#[near]
 impl Contract {
     /// A method which calls different contracts via cross contract function calls.
     pub fn multiple_contracts(&mut self) -> Promise {
