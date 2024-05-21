@@ -2,9 +2,10 @@
 [![](https://img.shields.io/badge/⋈%20Examples-Basics-green)](https://docs.near.org/tutorials/welcome)
 [![](https://img.shields.io/badge/Contract-JS-yellow)](contract-ts)
 [![](https://img.shields.io/badge/Contract-Rust-red)](contract-rs)
-[![](https://img.shields.io/badge/Frontend-JS-yellow)](frontend)
-![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-ts.yml/badge.svg)
-![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-rs.yml/badge.svg)
+![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-simple-ts.yml/badge.svg)
+![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-simple-rs.yml/badge.svg)
+![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-advanced-ts.yml/badge.svg)
+![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-advanced-rs.yml/badge.svg)
 
 This repository contains examples on how to perform cross-contract calls in both JavaScript and Rust.
 
@@ -17,11 +18,12 @@ This repository contains examples on how to perform cross-contract calls in both
 
 # What These Examples Show
 
-1. How to make cross contract call and handle their responses information in the NEAR network.
-2. How to handle their responses.
+1. How to make a NEAR contract call another and handle its response
+2. How to call multiple contracts at the same time and handle their responses
+3. How to call multiple functions on a same contract and handle its reponse
 
 <br />
 
 # Learn More
-1. Learn more about the contract through its [README](./contract-ts/README.md).
-2. Check [**our documentation**](https://docs.near.org/tutorials/examples/xcc).
+1. Learn more about the contract through its [README](./contract-simple-ts/README.md).
+2. Check [**our documentation**](https://docs.near.org/build/smart-contracts/anatomy/crosscontract).
