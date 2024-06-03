@@ -9,7 +9,7 @@ import {
 } from "near-sdk-js";
 import { AccountId } from "near-sdk-js/lib/types";
 
-const FIVE_TGAS = BigInt("50000000000000");
+const THIRTY_TGAS = BigInt("30000000000000");
 const NO_DEPOSIT = BigInt(0);
 const NO_ARGS = JSON.stringify({});
 
@@ -25,14 +25,14 @@ class CrossContractCall {
   @call({})
   query_greeting(): NearPromise {
     const promise = NearPromise.new(this.hello_account)
-      .functionCall("get_greeting", NO_ARGS, NO_DEPOSIT, FIVE_TGAS)
+      .functionCall("get_greeting", NO_ARGS, NO_DEPOSIT, THIRTY_TGAS)
       .then(
         NearPromise.new(near.currentAccountId())
           .functionCall(
             "query_greeting_callback",
             NO_ARGS,
             NO_DEPOSIT,
-            FIVE_TGAS,
+            THIRTY_TGAS,
           ),
       );
 
@@ -58,7 +58,7 @@ class CrossContractCall {
         "set_greeting",
         JSON.stringify({ greeting: new_greeting }),
         NO_DEPOSIT,
-        FIVE_TGAS,
+        THIRTY_TGAS,
       )
       .then(
         NearPromise.new(near.currentAccountId())
@@ -66,7 +66,7 @@ class CrossContractCall {
             "change_greeting_callback",
             NO_ARGS,
             NO_DEPOSIT,
-            FIVE_TGAS,
+            THIRTY_TGAS,
           ),
       );
 
