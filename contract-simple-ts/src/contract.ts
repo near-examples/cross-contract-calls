@@ -9,7 +9,7 @@ import {
 } from "near-sdk-js";
 import { AccountId } from "near-sdk-js/lib/types";
 
-const FIVE_TGAS = BigInt("50000000000000");
+const FIVE_TGAS = BigInt("5000000000000");
 const NO_DEPOSIT = BigInt(0);
 const NO_ARGS = JSON.stringify({});
 
