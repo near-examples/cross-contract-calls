@@ -3,4 +3,4 @@ on: [push]
 
 jobs:
   call-shared-workflow:
-    uses: near-examples/.github/.github/workflows/issue-mirror.yml@main
+    uses: near-examples/.github/.github/workflows/issue_mirror.yml@main
