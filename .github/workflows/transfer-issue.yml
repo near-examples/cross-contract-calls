@@ -6,3 +6,5 @@ on:
 jobs:
   call-shared-workflow:
     uses: near-examples/.github/.github/workflows/issue_mirror.yml@main
+    with:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
