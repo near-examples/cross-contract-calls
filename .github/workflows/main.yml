@@ -1,0 +1,6 @@
+name: Use Shared Workflow
+on: [push]
+
+jobs:
+  call-shared-workflow:
+    uses: org/.github/.github/workflows/issue-mirror.yml@main
