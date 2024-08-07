@@ -11,7 +11,7 @@ impl Contract {
             "get_greeting".to_owned(),
             NO_ARGS,
             NO_DEPOSIT,
-            TEN_TGAS
+            TEN_TGAS,
         );
 
         hello_promise.then(
@@ -40,14 +40,12 @@ impl Contract {
 
     // Public - change external greeting
     pub fn ll_change_greeting(&mut self, new_greeting: String) -> Promise {
-        let args = json!({ "greeting": new_greeting })
-            .to_string()
-            .into_bytes();
+        let args = json!({ "greeting": new_greeting }).to_string().into_bytes();
         let hello_promise = Promise::new(self.hello_account.clone()).function_call(
             "set_greeting".to_owned(),
             args,
             NO_DEPOSIT,
-            TEN_TGAS
+            TEN_TGAS,
         );
 
         hello_promise.then(

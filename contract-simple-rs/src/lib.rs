@@ -1,5 +1,5 @@
 // Find all our documentation at https://docs.near.org
-use near_sdk::{env, near, AccountId, Gas, PanicOnDefault, NearToken};
+use near_sdk::{env, near, AccountId, Gas, NearToken, PanicOnDefault};
 
 pub mod external_contract;
 pub use crate::external_contract::*;

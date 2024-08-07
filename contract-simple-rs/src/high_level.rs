@@ -1,7 +1,7 @@
 // Find all our documentation at https://docs.near.org
 use near_sdk::{env, log, near, Promise, PromiseError};
 
-use crate::{Contract, ContractExt, hello_near, FIVE_TGAS};
+use crate::{hello_near, Contract, ContractExt, FIVE_TGAS};
 
 #[near]
 impl Contract {
