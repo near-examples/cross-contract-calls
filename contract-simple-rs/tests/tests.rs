@@ -29,17 +29,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .into_result()?;
  
     // Begin tests
-    test_default_greeting(&alice, &contract).await?;
-    test_change_greeting(&alice, &contract).await?;
+    test_hl_default_greeting(&alice, &contract).await?;
+    test_hl_change_greeting(&alice, &contract).await?;
+    test_ll_change_greeting(&alice, &contract).await?;
     Ok(())
 }
 
-async fn test_default_greeting(
+async fn test_hl_default_greeting(
     user: &Account,
     contract: &Contract,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let greeting: String = user
-        .call(contract.id(), "query_greeting")
+        .call(contract.id(), "hl_query_greeting")
         .args_json(json!({}))
         .max_gas()
         .transact()
@@ -50,22 +51,22 @@ async fn test_default_greeting(
     Ok(())
 }
 
-async fn test_change_greeting(
+async fn test_hl_change_greeting(
   user: &Account,
   contract: &Contract,
 ) -> Result<(), Box<dyn std::error::Error>> {
   let result: bool = user
-      .call(contract.id(), "change_greeting")
+      .call(contract.id(), "hl_change_greeting")
       .args_json(json!({ "new_greeting": "Howdy" }))
       .max_gas()
       .transact()
       .await?
       .json()?;
 
-  assert_eq!(result, true);
+  assert!(result);
 
   let greeting: String = user
-      .call(contract.id(), "query_greeting")
+      .call(contract.id(), "hl_query_greeting")
       .args_json(json!({}))
       .max_gas()
       .transact()
@@ -73,5 +74,31 @@ async fn test_change_greeting(
       .json()?;
 
   assert_eq!(greeting, "Howdy".to_string());
+  Ok(())
+}
+
+async fn test_ll_change_greeting(
+  user: &Account,
+  contract: &Contract,
+) -> Result<(), Box<dyn std::error::Error>> {
+  let result: bool = user
+      .call(contract.id(), "ll_change_greeting")
+      .args_json(json!({ "new_greeting": "Hello" }))
+      .max_gas()
+      .transact()
+      .await?
+      .json()?;
+
+  assert!(result);
+
+  let greeting: String = user
+      .call(contract.id(), "ll_query_greeting")
+      .args_json(json!({}))
+      .max_gas()
+      .transact()
+      .await?
+      .json()?;
+
+  assert_eq!(greeting, "Hello".to_string());
   Ok(())
 }
