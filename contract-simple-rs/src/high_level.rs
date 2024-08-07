@@ -1,15 +1,7 @@
 // Find all our documentation at https://docs.near.org
-use near_sdk::ext_contract;
 use near_sdk::{env, log, near, Promise, PromiseError};
 
-use crate::{Contract, ContractExt, FIVE_TGAS};
-
-// Validator interface, for cross-contract calls
-#[ext_contract(hello_near)]
-trait HelloNear {
-    fn get_greeting(&self) -> String;
-    fn set_greeting(&self, greeting: String);
-}
+use crate::{Contract, ContractExt, hello_near, FIVE_TGAS};
 
 #[near]
 impl Contract {

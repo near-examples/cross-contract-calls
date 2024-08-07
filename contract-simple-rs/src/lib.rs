@@ -1,6 +1,9 @@
 // Find all our documentation at https://docs.near.org
 use near_sdk::{env, near, AccountId, Gas, PanicOnDefault, NearToken};
 
+pub mod external_contract;
+pub use crate::external_contract::*;
+
 pub mod high_level;
 pub mod low_level;
 
