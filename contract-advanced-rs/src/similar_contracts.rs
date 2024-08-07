@@ -39,15 +39,15 @@ impl Contract {
 
                 match result {
                     PromiseResult::Failed => {
-                        log!(format!("Promise number {index} failed."));
+                        log!("Promise number {index} failed.");
                         None
                     }
                     PromiseResult::Successful(value) => {
                         if let Ok(message) = near_sdk::serde_json::from_slice::<String>(&value) {
-                            log!(format!("Call {index} returned: {message}"));
+                            log!("Call {index} returned: {message}");
                             Some(message)
                         } else {
-                            log!(format!("Error deserializing call {index} result."));
+                            log!("Error deserializing call {index} result.");
                             None
                         }
                     }

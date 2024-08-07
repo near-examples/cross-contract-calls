@@ -63,7 +63,7 @@ impl Contract {
     ) -> (String, i8, Vec<PostedMessage>) {
         // The callback has access to the result of the 3 calls
         let greeting = if let Ok(result) = hello_result {
-            log!(format!("HelloNear says {result}"));
+            log!("HelloNear says {result}");
             result
         } else {
             log!("The call to HelloNear failed");
@@ -71,7 +71,7 @@ impl Contract {
         };
 
         let counter = if let Ok(result) = counter_result {
-            log!(format!("Counter is {result}"));
+            log!("Counter is {result}");
             result
         } else {
             log!("The call to Counter failed");
@@ -79,7 +79,7 @@ impl Contract {
         };
 
         let messages = if let Ok(result) = guestbook_result {
-            log!(format!("The messages are {result:?}"));
+            log!("The messages are {result:?}");
             result
         } else {
             log!("The call to GuestBook failed");

@@ -26,7 +26,7 @@ impl Contract {
     ) -> String {
         // The callback only has access to the last action's result
         if let Ok(result) = last_result {
-            log!(format!("The last result is {result}"));
+            log!("The last result is {result}");
             result
         } else {
             log!("The batch call failed and all calls got reverted");
