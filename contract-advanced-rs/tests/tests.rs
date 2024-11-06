@@ -1,7 +1,7 @@
 use std::string::String;
 use serde_json::json;
 use near_workspaces::{types::NearToken, Account, Contract};
-use near_sdk::serde::{Deserialize, Serialize};
+use near_sdk::near;
  
 #[tokio::test]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -54,8 +54,8 @@ async fn test_multiple_contracts(
     guest_book_contract: &Contract,
     counter_contract: &Contract
 ) -> Result<(), Box<dyn std::error::Error>> {
-    #[derive(Deserialize, Serialize, Debug, PartialEq)]
-    #[serde(crate = "near_sdk::serde")]
+    #[derive(Debug, PartialEq)]
+    #[near(serializers = [json])]
     pub struct PostedMessage {
         pub premium: bool,
         pub sender: String,
