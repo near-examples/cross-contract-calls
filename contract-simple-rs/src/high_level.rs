@@ -1,4 +1,4 @@
-// Find all our documentation at https://docs.near.org
+// Find all our documentation at https://docs.near.org/
 use near_sdk::{env, log, near, Promise, PromiseError};
 
 use crate::{hello_near, Contract, ContractExt, FIVE_TGAS};
