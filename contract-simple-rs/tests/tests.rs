@@ -4,9 +4,11 @@ use serde_json::json;
 #[tokio::test]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let worker = near_workspaces::sandbox().await?;
-    // Deploy hello contract
-    let hello_contract_wasm = std::fs::read("./tests/hello-near/hello-near.wasm")?;
-    let hello_contract = worker.dev_deploy(&hello_contract_wasm).await?;
+
+    // Build and deploy hello contract
+    let hello_contract_wasm = near_workspaces::compile_project("./tests/hello-near").await?;
+    let hello_contract: Contract = worker.dev_deploy(&hello_contract_wasm).await?;
+
     // Deploy contract for testing
     let contract_wasm = near_workspaces::compile_project("./").await?;
     let contract = worker.dev_deploy(&contract_wasm).await?;
