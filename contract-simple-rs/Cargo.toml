@@ -5,27 +5,15 @@ authors = ["Near Inc <hello@near.org>"]
 edition = "2021"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
-near-sdk = "5.4.0"
+near-sdk = "5.6.0"
+near-contract-standards = "5.6.0"
 
 [dev-dependencies]
-near-sdk = { version = "5.4.0", features = ["unit-testing"] }
-near-workspaces = { version = "0.11.0", features = ["unstable"] }
+near-sdk = { version = "5.6.0", features = ["unit-testing"] }
+near-workspaces = { version = "0.15.0", features = ["unstable"] }
 tokio = { version = "1.12.0", features = ["full"] }
 serde_json = "1"
-
-[profile.release]
-codegen-units = 1
-# Tell `rustc` to optimize for small code size.
-opt-level = "z"
-lto = true
-debug = false
-panic = "abort"
-# Opt into extra safety checks on arithmetic operations https://stackoverflow.com/a/64136471/249801
-overflow-checks = true
-
-[workspace]
-members = []

@@ -1,24 +1,25 @@
-use std::string::String;
-use serde_json::json;
-use near_workspaces::{types::NearToken, Account, Contract};
 use near_sdk::near;
- 
+use near_workspaces::{types::NearToken, Account, Contract};
+use serde_json::json;
+use std::string::String;
+
 #[tokio::test]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let worker = near_workspaces::sandbox().await?;
     // Deploy hello contract
-    let hello_contract_wasm = std::fs::read("./tests/external-contracts/hello-near.wasm")?;
+    let hello_contract_wasm =
+        near_workspaces::compile_project("./tests/contracts/hello-near").await?;
     let hello_contract = worker.dev_deploy(&hello_contract_wasm).await?;
     // Deploy guest-book contract
-    let guest_book_contract_wasm = std::fs::read("./tests/external-contracts/guest-book.wasm")?;
+    let guest_book_contract_wasm = std::fs::read("./tests/contracts/guest-book.wasm")?;
     let guest_book_contract = worker.dev_deploy(&guest_book_contract_wasm).await?;
     // Deploy counter contract
-    let counter_contract_wasm = std::fs::read("./tests/external-contracts/counter.wasm")?;
+    let counter_contract_wasm = std::fs::read("./tests/contracts/counter.wasm")?;
     let counter_contract = worker.dev_deploy(&counter_contract_wasm).await?;
     // Deploy contract for testing
     let contract_wasm = near_workspaces::compile_project("./").await?;
     let contract = worker.dev_deploy(&contract_wasm).await?;
- 
+
     // Create accounts
     let account = worker.dev_create_account().await?;
     let alice = account
@@ -39,9 +40,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .transact()
         .await?
         .into_result()?;
- 
+
     // Begin tests
-    test_multiple_contracts(&alice, &contract, &hello_contract, &guest_book_contract, &counter_contract).await?;
+    test_multiple_contracts(
+        &alice,
+        &contract,
+        &hello_contract,
+        &guest_book_contract,
+        &counter_contract,
+    )
+    .await?;
     test_similar_contracts(&alice, &contract).await?;
     test_batch_actions(&alice, &contract).await?;
     Ok(())
@@ -52,7 +60,7 @@ async fn test_multiple_contracts(
     contract: &Contract,
     hello_contract: &Contract,
     guest_book_contract: &Contract,
-    counter_contract: &Contract
+    counter_contract: &Contract,
 ) -> Result<(), Box<dyn std::error::Error>> {
     #[derive(Debug, PartialEq)]
     #[near(serializers = [json])]
@@ -96,7 +104,7 @@ async fn test_multiple_contracts(
         .transact()
         .await?
         .json()?;
- 
+
     assert_eq!(result.0, "Howdy".to_string());
     assert_eq!(result.1, -1);
     assert_eq!(result.2, expected_messages);
@@ -104,40 +112,40 @@ async fn test_multiple_contracts(
 }
 
 async fn test_similar_contracts(
-  user: &Account,
-  contract: &Contract
+    user: &Account,
+    contract: &Contract,
 ) -> Result<(), Box<dyn std::error::Error>> {
-  let expected: Vec<String> = vec![
-      "hi".parse().unwrap(),
-      "howdy".parse().unwrap(),
-      "bye".parse().unwrap()
-  ];
+    let expected: Vec<String> = vec![
+        "hi".parse().unwrap(),
+        "howdy".parse().unwrap(),
+        "bye".parse().unwrap(),
+    ];
 
-  let result: Vec<String> = user
-      .call(contract.id(), "similar_contracts")
-      .args_json(json!({}))
-      .max_gas()
-      .transact()
-      .await?
-      .json()?;
+    let result: Vec<String> = user
+        .call(contract.id(), "similar_contracts")
+        .args_json(json!({}))
+        .max_gas()
+        .transact()
+        .await?
+        .json()?;
 
-  assert_eq!(result, expected);
-  Ok(())
+    assert_eq!(result, expected);
+    Ok(())
 }
 
 async fn test_batch_actions(
-  user: &Account,
-  contract: &Contract
+    user: &Account,
+    contract: &Contract,
 ) -> Result<(), Box<dyn std::error::Error>> {
-  let expected: String = "bye".parse().unwrap();
-  let result: String = user
-      .call(contract.id(), "batch_actions")
-      .args_json(json!({}))
-      .max_gas()
-      .transact()
-      .await?
-      .json()?;
+    let expected: String = "bye".parse().unwrap();
+    let result: String = user
+        .call(contract.id(), "batch_actions")
+        .args_json(json!({}))
+        .max_gas()
+        .transact()
+        .await?
+        .json()?;
 
-  assert_eq!(result, expected);
-  Ok(())
+    assert_eq!(result, expected);
+    Ok(())
 }
