@@ -8,13 +8,13 @@
     "test": "$npm_execpath build && ava -- ./build/cross_contract.wasm"
   },
   "dependencies": {
-    "near-cli": "^4.0.10",
-    "near-sdk-js": "1.0.0"
+    "near-cli": "^4.0.13",
+    "near-sdk-js": "2.0.0"
   },
   "devDependencies": {
     "@ava/typescript": "^4.1.0",
     "ava": "^6.1.2",
-    "near-workspaces": "^3.5.0",
+    "near-workspaces": "^4.0.0",
     "ts-morph": "^22.0.0",
     "ts-node": "^10.9.2",
     "tsimp": "^2.0.11",
