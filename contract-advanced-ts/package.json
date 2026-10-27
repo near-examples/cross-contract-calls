@@ -8,7 +8,6 @@
     "test": "$npm_execpath build && ava -- ./build/cross_contract.wasm"
   },
   "dependencies": {
-    "near-cli": "^4.0.13",
     "near-sdk-js": "2.0.0"
   },
   "devDependencies": {
