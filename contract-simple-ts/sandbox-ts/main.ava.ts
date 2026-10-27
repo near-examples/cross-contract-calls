@@ -1,5 +1,7 @@
-import { Worker, NearAccount } from 'near-workspaces';
-import anyTest, { TestFn } from 'ava';
+import { Worker } from 'near-workspaces';
+import type { NearAccount } from 'near-workspaces';
+import anyTest from 'ava';
+import type { TestFn } from 'ava';
 import { setDefaultResultOrder } from 'dns'; setDefaultResultOrder('ipv4first'); // temp fix for node >v17
 
 // Global context
