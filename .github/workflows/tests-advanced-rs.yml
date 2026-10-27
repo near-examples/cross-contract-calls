@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install contract build tooling
-        run: cargo install cargo-near --version 0.21.1 --locked
+        run: cargo install cargo-near --version 0.21.1 --locked --no-default-features
       - name: Install and test modules
         run: |
           cd ./contract-advanced-rs
