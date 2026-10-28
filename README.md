@@ -11,19 +11,14 @@ cargo install cargo-near --version 0.21.1 --locked --no-default-features
 Contract builds and integration-test fixtures compile from source; no live network account is required for tests.
 
 [![](https://img.shields.io/badge/⋈%20Examples-Basics-green)](https://docs.near.org/tutorials/welcome)
-[![](https://img.shields.io/badge/Contract-JS-yellow)](contract-ts)
-[![](https://img.shields.io/badge/Contract-Rust-red)](contract-rs)
-![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-simple-ts.yml/badge.svg)
+[![](https://img.shields.io/badge/Contract-Rust-red)](contract-simple-rs)
 ![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-simple-rs.yml/badge.svg)
-![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-advanced-ts.yml/badge.svg)
 ![example workflow](https://github.com/near-examples/cross-contract-calls/actions/workflows/tests-advanced-rs.yml/badge.svg)
 
-This repository contains examples on how to perform cross-contract calls in both JavaScript and Rust.
+This repository contains examples on how to perform cross-contract calls in Rust.
 
 - [contract-simple-rs](contract-simple-rs) - Rust example
-- [contract-simple-ts](contract-simple-ts) - JavaScript example
 - [contract-advanced-rs](contract-advanced-rs) - Rust advanced example
-- [contract-advanced-ts](ccontract-advanced-ts) - JavaScript advanced example
 
 <br />
 
@@ -36,5 +31,5 @@ This repository contains examples on how to perform cross-contract calls in both
 <br />
 
 # Learn More
-1. Learn more about the contract through its [README](./contract-simple-ts/README.md).
+1. Learn more about the contract through its [README](./contract-simple-rs/README.md).
 2. Check [**our documentation**](https://docs.near.org/build/smart-contracts/anatomy/crosscontract).
