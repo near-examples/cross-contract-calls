@@ -16,6 +16,8 @@ cargo near build
 
 ## How to Test Locally?
 
+Tests start `near-sandbox` directly and use `near-api` to deploy fixtures, sign calls and verify callback results on an isolated local chain.
+
 ```bash
 cargo test
 ```
